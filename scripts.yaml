@@ -1,0 +1,41 @@
+cover_step:
+  alias: Cover Step
+  fields:
+    cover:
+      selector:
+        entity:
+          domain:
+          - cover
+          multiple: false
+      name: Cover
+      description: Cover to control
+      required: true
+    move_direction:
+      selector:
+        select:
+          options:
+          - Up
+          - Down
+      name: Move direction
+      required: true
+    step_size:
+      selector:
+        number:
+          min: 1
+          max: 100
+          step: 5
+      name: Step size
+      description: 'Size of the step (default: 20)'
+      default: 20
+      required: true
+  mode: queued
+  max: 10
+  sequence:
+  - variables:
+      current_position: '{{state_attr(cover,''current_position'') | default(0)}}'
+      next_position: '{{current_position + (iif(move_direction == ''Up'',1,-1) * step_size)}}'
+  - service: cover.set_cover_position
+    target:
+      device_id: '{{device_id(cover)}}'
+    data:
+      position: '{{next_position}}'

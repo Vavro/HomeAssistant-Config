@@ -1,0 +1,693 @@
+- id: '1604262337449'
+  alias: Turn off garden lights close to midnight
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: a4e0910234c25731e5ae8600350f1554
+    entity_id: switch.garden_lights
+    domain: switch
+  mode: single
+- id: '1604422806892'
+  alias: Turn on garden lights at dusk
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: 00:30:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: a4e0910234c25731e5ae8600350f1554
+    entity_id: switch.garden_lights
+    domain: switch
+  mode: single
+- id: '1604504510805'
+  alias: Trigger hot water circulation
+  description: Will cycle the hot water in the pipes when it was not run for more
+    than one hour
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: e16c80c12b8b9207ca51f50b422e8385
+    entity_id: light.tasmota_toilet_light
+    domain: light
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  - platform: device
+    type: turned_on
+    device_id: 34a279c00dc5b2bd5a73b5c7054707ab
+    entity_id: light.kitchen_counter_top_light
+    domain: light
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  - platform: device
+    type: turned_on
+    device_id: 0a4af1c5b8c683a063d3b19922ed30a7
+    entity_id: a66bb6bc3089ca25bca38a5d824229c8
+    domain: light
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  - device_id: 6bdbc44c2f624cd6d7047018c882951b
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 450cab5899a632d22a92a0459705ebbc
+    entity_id: 4de41091443ae38ee4efae3d4685a6ba
+    domain: switch
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  action:
+  - type: turn_on
+    device_id: 450cab5899a632d22a92a0459705ebbc
+    entity_id: 4de41091443ae38ee4efae3d4685a6ba
+    domain: switch
+  mode: single
+- id: '1604504595208'
+  alias: Hot Water Circulation - turn off after 1,5 minute
+  description: Whenever Hot Water Circulation is turned on, it will be turned off
+    after 1 minute
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 450cab5899a632d22a92a0459705ebbc
+    entity_id: 4de41091443ae38ee4efae3d4685a6ba
+    domain: switch
+  condition: []
+  action:
+  - delay: 00:01:30
+  - type: turn_off
+    device_id: 450cab5899a632d22a92a0459705ebbc
+    entity_id: 4de41091443ae38ee4efae3d4685a6ba
+    domain: switch
+  mode: single
+- id: '1606518609870'
+  alias: House Christmas lights On
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:30
+  - platform: time
+    at: 05:30:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: e9638f992abd9c2b0f31f001d924cf03
+    entity_id: switch.attic_switch
+    domain: switch
+  - type: turn_on
+    device_id: 0154c852dbaae522ee7d08d9f5039b77
+    entity_id: switch.garage_switch
+    domain: switch
+  mode: single
+- id: '1606518676277'
+  alias: House Christmas lights Off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: '+1:00'
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: e9638f992abd9c2b0f31f001d924cf03
+    entity_id: switch.attic_switch
+    domain: switch
+  - type: turn_off
+    device_id: 0154c852dbaae522ee7d08d9f5039b77
+    entity_id: switch.garage_switch
+    domain: switch
+  mode: single
+- id: '1641845246827'
+  alias: Trigger on entry hall light by motion
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 7f2c8c67c60916707b32bc33d4da999e
+    entity_id: binary_sensor.entry_hall_motion_sensoe_49a46e24_ias_zone
+    domain: binary_sensor
+  condition:
+  - condition: time
+    after: 06:00:00
+    before: '22:00:00'
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      transition: 1
+    target:
+      entity_id: light.entry_hall_lights
+  mode: single
+- id: '1641845329328'
+  alias: Trigger off entry hall light by motion
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: 7f2c8c67c60916707b32bc33d4da999e
+    entity_id: binary_sensor.entry_hall_motion_sensoe_49a46e24_ias_zone
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.entry_hall_lights
+    data:
+      transition: 4
+  mode: single
+- id: '1654283508146'
+  alias: Turn on water pump for regular irrigation
+  description: ''
+  trigger:
+  - platform: time
+    at: 04:00:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: a4e0910234c25731e5ae8600350f1554
+    entity_id: switch.cerpadlo
+    domain: switch
+  mode: single
+- id: '1654283512101'
+  alias: Turn off water pump after regular irrigation
+  description: ''
+  trigger:
+  - platform: time
+    at: 05:40:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: a4e0910234c25731e5ae8600350f1554
+    entity_id: switch.cerpadlo
+    domain: switch
+  mode: single
+- id: '1669753307855'
+  alias: Christmas Indoor lights On
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:30:00
+  - platform: time
+    at: '17:00:00'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: e6e5aaa36a8b8d89a33d10cb7a134be2
+    entity_id: switch.kids_room_bottom_bed_socket_on_off
+    domain: switch
+  mode: single
+- id: '1669753360819'
+  alias: Christmas Indoor Lights Off
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00:00
+  - platform: time
+    at: '23:00:00'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: e6e5aaa36a8b8d89a33d10cb7a134be2
+    entity_id: switch.kids_room_bottom_bed_socket_on_off
+    domain: switch
+  mode: single
+- id: '1681811535955'
+  alias: Staircase switch controll
+  description: 'Přepíná světla na schodišťi pomocí vypinacu '
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.switch1
+    not_from:
+    - unknown
+    - unavailable
+    to:
+    - 'on'
+    - 'off'
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      transition: 2
+    target:
+      entity_id: light.silicon_labs_ezsp_staircase_group_zha_group_0x0006
+  mode: single
+- id: '1681977674473'
+  alias: Bedroom Switch Control
+  description: Přepíná světla v ložnici podle vypínače. Pokud je alespoň jedno světlo
+    zapnuté vypne, jinak rozsvítí hlavní světlo
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.switch1_2
+    not_from:
+    - unknown
+    - unavailable
+    to:
+    - 'on'
+    - 'off'
+  condition: []
+  action:
+  - if:
+    - condition: or
+      conditions:
+      - condition: device
+        type: is_on
+        device_id: 181200e4ab41c7e5fc90abe72401531e
+        entity_id: c55b54e97bfa3f9433acf6fbafbff17b
+        domain: light
+      - condition: device
+        type: is_on
+        device_id: 9125e5ac69e7d85824ecf5a939ca0723
+        entity_id: 9c957e51d7e4d388bdc0bed312052678
+        domain: light
+    then:
+    - type: turn_off
+      device_id: 9125e5ac69e7d85824ecf5a939ca0723
+      entity_id: 9c957e51d7e4d388bdc0bed312052678
+      domain: light
+    - type: turn_off
+      device_id: 181200e4ab41c7e5fc90abe72401531e
+      entity_id: c55b54e97bfa3f9433acf6fbafbff17b
+      domain: light
+    else:
+    - type: turn_on
+      device_id: 9125e5ac69e7d85824ecf5a939ca0723
+      entity_id: 9c957e51d7e4d388bdc0bed312052678
+      domain: light
+  mode: single
+- id: '1681978337549'
+  alias: Wardrobe switch control
+  description: Přepíná světla v šatně podle vypínače
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.switch1_3
+    not_from:
+    - unknown
+    - unavailable
+    to:
+    - 'on'
+    - 'off'
+  condition: []
+  action:
+  - type: toggle
+    device_id: 80e0f46504677992f3c62a31718d244f
+    entity_id: light.wardrobe_light_light
+    domain: light
+  mode: single
+- id: '1691133773533'
+  alias: Living room shutter control
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      controller_device: a12a49d2ec994ed48054b53815eecfb8
+      action_button_up_short:
+      - service: script.cover_step
+        data:
+          cover: cover.obyvak_velke_vlevo
+          move_direction: Up
+          step_size: 20
+      action_button_down_short:
+      - service: script.cover_step
+        data:
+          cover: cover.obyvak_velke_vlevo
+          move_direction: Down
+          step_size: 20
+      action_button_down_long:
+      - device_id: b618c86ec179a620f134c6d185c2694c
+        domain: cover
+        entity_id: e32930222c4d544e1497e49c533854de
+        type: close
+      action_button_down_release: []
+      action_button_up_long:
+      - device_id: b618c86ec179a620f134c6d185c2694c
+        domain: cover
+        entity_id: e32930222c4d544e1497e49c533854de
+        type: open
+      action_button_up_release: []
+      helper_last_controller_event: input_text.living_room_shutter_control_text_helper
+- id: '1691156616099'
+  alias: Kids Room Oliver's bed light control
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e2001_e2002_new.yaml
+    input:
+      integration: ZHA
+      controller_device: 723af64fefe30851ec3d88f28e4f26f7
+      helper_last_controller_event: input_text.oliver_s_bed_remote_controller_helper
+      action_button_up_double: []
+      button_up_double_press: true
+      button_down_double_press: true
+- id: '1691157723658'
+  alias: Kids Room Oliver's bed light control hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: 723af64fefe30851ec3d88f28e4f26f7
+      controller_model: IKEA E2001/E2002 STYRBAR Remote control
+      light: light.kids_room_olivers_bed_light_light
+- id: '1691387290641'
+  alias: Office Lights Control
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e2001_e2002_new.yaml
+    input:
+      controller_device: 0991f609a00c3e35f4b84d67c37d4b1c
+      helper_last_controller_event: input_text.office_remote_controller_helper
+      integration: ZHA
+- id: '1691387606370'
+  alias: Office Lights Control Hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: 0991f609a00c3e35f4b84d67c37d4b1c
+      light: light.office_lights
+      light_color_mode: Color Temperature
+      controller_model: IKEA E2001/E2002 STYRBAR Remote control
+- id: '1691407284855'
+  alias: Living Room Kaja light control
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e2001_e2002.yaml
+    input:
+      integration: ZHA
+      controller_device: a6467f3d42e3224a38539232e4f3d010
+      helper_last_controller_event: input_text.living_room_kaja_light_remote_controller_helper
+      button_up_double_press: true
+      button_down_double_press: true
+- id: '1691407359878'
+  alias: Living Room Kaja light controller hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: a6467f3d42e3224a38539232e4f3d010
+      controller_model: IKEA E2001/E2002 STYRBAR Remote control
+      light: light.living_room_kaja_light_level_light_color_on_off
+- id: '1691411867806'
+  alias: Kitchen Light Control
+  description: ''
+  use_blueprint:
+    path: EPMatt/philips_324131092621.yaml
+    input:
+      integration: ZHA
+      controller_device: d86f15d8868e4bcbac740c3435c03b04
+      helper_last_controller_event: input_text.kitchen_light_remote_controller_helper
+- id: '1691411933237'
+  alias: Kitchen Light Control Hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: d86f15d8868e4bcbac740c3435c03b04
+      controller_model: Philips 324131092621 Hue Dimmer switch
+      light: light.kitchen_light_light
+      light_color_mode: Color Temperature
+- id: '1691413325344'
+  alias: Living Room Dining Light Control
+  description: ''
+  use_blueprint:
+    path: EPMatt/philips_324131092621.yaml
+    input:
+      integration: ZHA
+      controller_device: ac8b9140ebc4320b9db5b195f7c901a0
+      helper_last_controller_event: input_text.living_room_dining_light_control_helper
+- id: '1691414673084'
+  alias: Living Room Dining Light Control Hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: ac8b9140ebc4320b9db5b195f7c901a0
+      controller_model: Philips 324131092621 Hue Dimmer switch
+      light: light.living_room_dining_lights
+      light_color_mode: Color Temperature
+- id: '1691516779022'
+  alias: Bedroom Lamp remote controller
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      controller_device: a0c26a04b9c12a2a2f227c96fb813e3e
+      helper_last_controller_event: input_text.bedroom_lamp_remote_controller_helper
+      button_up_double_press: true
+      button_down_double_press: true
+- id: '1691516848677'
+  alias: Bedroom Lamp remote controller helper
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: a0c26a04b9c12a2a2f227c96fb813e3e
+      controller_model: IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
+      light: light.bedroom_bed_lamp_light
+      light_color_mode: Color Temperature
+- id: '1699905347512'
+  alias: Living room main light remote control
+  description: ''
+  use_blueprint:
+    path: EPMatt/philips_324131092621.yaml
+    input:
+      integration: ZHA
+      controller_device: 04c5db8c1b1ee833e4d3547b3c5603fd
+      helper_last_controller_event: input_text.living_room_main_light_remote_controller_helper
+      button_off_double_press: false
+      action_button_off_double:
+      - service: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.all_lights_turned_off_except_hall
+        data:
+          transition: 5
+- id: '1699905521005'
+  alias: Living room main light remote control hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: 04c5db8c1b1ee833e4d3547b3c5603fd
+      controller_model: Philips 324131092621 Hue Dimmer switch
+      light: light.living_room_main_light
+      light_color_mode: Color Temperature
+      on_brightness: 22
+      force_brightness: false
+- id: '1703257416987'
+  alias: Toilet heater turn off after 10 minutes
+  description: Whenever heater in toilet is turned on, it will be turned off after
+    10 minute
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 7db3c1ec10143e0c221f0506f3837606
+    entity_id: c857b9eedd871add9b323d37c77d7e8e
+    domain: light
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 7db3c1ec10143e0c221f0506f3837606
+    entity_id: c857b9eedd871add9b323d37c77d7e8e
+    domain: light
+  mode: single
+- id: '1703701633630'
+  alias: Living room Aqara Magic Cube
+  description: ''
+  use_blueprint:
+    path: rvaidya/aqara_magic_cube.yaml
+    input:
+      remote: 91b91c53895dabfc5573d4ba8163d421
+      active_face: input_number.living_room_aqara_cube_controller_active_side_helper
+      cube_flip_1:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.watching_tv_night
+        metadata: {}
+      cube_flip_2:
+      - service: light.turn_off
+        target:
+          area_id: living_room
+        data:
+          transition: 2
+- id: '1709308848246'
+  alias: Kids Room table light controller hook
+  description: ''
+  use_blueprint:
+    path: EPMatt/light_new.yaml
+    input:
+      controller_device: 2f6c1ca0a3ab798d307e5b4543903a9d
+      controller_model: IKEA E2001/E2002 STYRBAR Remote control
+      light: light.kids_room_table_light_light
+- id: '1709308946936'
+  alias: Kids Room table light controller
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e2001_e2002_new.yaml
+    input:
+      integration: ZHA
+      controller_device: 2f6c1ca0a3ab798d307e5b4543903a9d
+      helper_last_controller_event: input_text.kids_room_table_light_remote_helper
+      action_button_up_double: []
+      button_up_double_press: true
+      button_down_double_press: true
+- id: '1714819638596'
+  alias: Kids room shutter control
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      controller_device: 9726976ff749239cee62db44ed8e3892
+      action_button_up_short:
+      - service: script.cover_step
+        data:
+          cover: cover.detsky_pokoj
+          move_direction: Up
+          step_size: 20
+      action_button_down_short:
+      - service: script.cover_step
+        data:
+          cover: cover.detsky_pokoj
+          move_direction: Down
+          step_size: 20
+      action_button_down_long:
+      - device_id: 455916ef4b4cfbdc1fc764dfeb226b7f
+        domain: cover
+        entity_id: 07015bed54bb893d1edc23f48ae7eb41
+        type: close
+      action_button_down_release: []
+      action_button_up_long:
+      - device_id: 455916ef4b4cfbdc1fc764dfeb226b7f
+        domain: cover
+        entity_id: 07015bed54bb893d1edc23f48ae7eb41
+        type: open
+      action_button_up_release: []
+      helper_last_controller_event: input_text.kids_room_shutter_controller_helper
+- id: '1714821318449'
+  alias: Office shutter control
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      controller_device: 697ca14c6640f0a3bd5e96e76f9fea37
+      action_button_up_short:
+      - service: script.cover_step
+        data:
+          cover: cover.kancelar
+          move_direction: Up
+          step_size: 20
+      action_button_down_short:
+      - service: script.cover_step
+        data:
+          cover: cover.kancelar
+          move_direction: Down
+          step_size: 20
+      action_button_down_long:
+      - device_id: bf3983f1371a56c4c5b36ee56ba27bd0
+        domain: cover
+        entity_id: b8803ee61786e8e59c1acb144c5169ea
+        type: close
+      action_button_down_release: []
+      action_button_up_long:
+      - device_id: bf3983f1371a56c4c5b36ee56ba27bd0
+        domain: cover
+        entity_id: b8803ee61786e8e59c1acb144c5169ea
+        type: open
+      action_button_up_release: []
+      helper_last_controller_event: input_text.office_shutter_control_text_helper
+- id: '1728585593651'
+  alias: Living Room Morning Radio when lights turn on
+  description: ''
+  triggers:
+  - type: turned_on
+    device_id: 58ea5f112bb39d970ec7559b6bf6295d
+    entity_id: f68275a1d26dad04530dd8198ec4742b
+    domain: light
+    trigger: device
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 4
+  - type: turned_on
+    device_id: 34a279c00dc5b2bd5a73b5c7054707ab
+    entity_id: dd986af01a17dbf45f7e657c245f7a76
+    domain: light
+    trigger: device
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 4
+  - type: turned_on
+    device_id: 0a4af1c5b8c683a063d3b19922ed30a7
+    entity_id: a66bb6bc3089ca25bca38a5d824229c8
+    domain: light
+    trigger: device
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 4
+  conditions:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    before: 06:45:00
+    after: 05:55:00
+  actions:
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.living_room_soundbar
+    data:
+      media_content_id: media-source://radio_browser/1b568695-9ce7-493d-ba72-d9b3d5e0a364
+      media_content_type: audio/mpeg
+    metadata: {}
+  - action: media_player.volume_set
+    metadata: {}
+    data:
+      volume_level: 0.1
+    target:
+      entity_id: media_player.living_room_soundbar
+  - action: media_player.play_media
+    metadata: {}
+    data:
+      media_content_id: ''
+      media_content_type: ''
+    target:
+      entity_id: media_player.living_room_speaker
+    enabled: false
+  mode: single

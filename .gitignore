@@ -1,0 +1,58 @@
+# Files with personal details
+*.crt
+*.csr
+*.key
+*.pem
+.cloud
+.google.token
+.HA_VERSION
+.storage
+.uuid
+icloud/
+google_calendars.yaml
+harmony_media_room.conf
+home-assistant.db
+home-assistant_v2.db
+home-assistant_v2.db-*
+html5_push_registrations.conf
+image
+ip_bans.yaml
+known_devices.yaml
+phue.conf
+plex.conf
+pyozw.sqlite
+secrets.yaml
+tradfri.conf
+webostv.conf
+
+# Temporary files
+*.db-journal
+*.pid
+tts
+
+# automatically downloaded dependencies
+deps
+lib
+
+# Log files
+home-assistant.log
+home-assistant.log.*
+ozw_log.txt
+
+#scans folder might contain results of scans that are sensitive
+scans
+
+# Development files
+custom_components
+
+#zigbee-db should not be stored
+zigbee.db*
+
+#omit zigpy_ota files
+zigpy_ota
+
+#diyhue omit for now as its not setup properly
+diyhue
+
+#hassemulatedhue has secrets in the only config file
+hass-emulated-hue

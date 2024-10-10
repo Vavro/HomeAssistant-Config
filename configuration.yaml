@@ -1,0 +1,68 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# after last update no longer needed
+# hydrawise:
+#   access_token: !secret hydrawise_access_token
+
+#binary_sensor:
+#  - platform: hydrawise
+
+#sensor:
+#  - platform: hydrawise
+
+#switch:
+#  - platform: hydrawise
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+zha:
+  zigpy_config:
+    ota:
+      otau_directory: /config/zigpy_ota
+      ikea_provider: true
+      inovelli_provider: false
+      ledvance_provider: true
+      salus_provider: false
+      sonoff_provider: true
+      thirdreality_provider: false
+
+samsung_soundbar:
+  devices:
+    - name: Living room soundbar
+      api_key: !secret living_room_soundbar_api_key
+      device_id: !secret living_room_soundbar_device_id
+      max_volume: 100
+
+api:
+
+#zha_toolkit is now enabled through HACS custom components
+#zha_toolkit:
+
+#enable influxdb integration with all defaults
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: homeassistant
+  username: !secret influxdb_homeassistant_username
+  password: !secret influxdb_homeassistant_password
+  max_retries: 3
+  default_measurement: state
+
+logger:
+  default: warn #info 
+#  logs:
+#    homeassistant.components.zha: debug
+#    zigpy: debug
+
+homeassistant:
+  customize: !include customize.yaml
+  auth_mfa_modules:
+    - type: totp

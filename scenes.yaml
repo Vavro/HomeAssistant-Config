@@ -1,0 +1,642 @@
+- id: '1612187089265'
+  name: Office - Video Konference - bright sunlight
+  entities:
+    light.hall_light:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 255
+      hs_color:
+      - 0
+      - 1.176
+      rgb_color:
+      - 255
+      - 252
+      - 252
+      xy_color:
+      - 0.326
+      - 0.329
+      effect: none
+      friendly_name: Office light 1
+      supported_features: 63
+      state: 'on'
+    light.hue_color_lamp_1:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 255
+      color_temp: 292
+      hs_color:
+      - 27.252
+      - 46.451
+      rgb_color:
+      - 255
+      - 190
+      - 136
+      xy_color:
+      - 0.46
+      - 0.376
+      effect: none
+      friendly_name: Office light 2
+      supported_features: 63
+      state: 'on'
+    cover.kancelar:
+      current_position: 40
+      friendly_name: Kancelář
+      supported_features: 7
+      state: open
+- id: '1612187155145'
+  name: Office - work hours
+  entities:
+    light.hall_light:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      supported_color_modes:
+      - color_temp
+      - hs
+      friendly_name: Office light 1
+      supported_features: 63
+      state: 'off'
+    light.hue_color_lamp_1:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      - random
+      supported_color_modes:
+      - color_temp
+      - hs
+      friendly_name: Office light 2
+      supported_features: 63
+      state: 'off'
+    cover.kancelar:
+      current_position: 100
+      friendly_name: Kancelář
+      supported_features: 7
+      state: open
+- id: '1690626521473'
+  name: Bright sun & hot noon
+  entities:
+    cover.obyvak_velke_stred:
+      current_position: 40
+      friendly_name: Obyvak velke střed
+      supported_features: 7
+      state: open
+    cover.obyvak_velke_vlevo:
+      current_position: 40
+      friendly_name: Obyvak velke vlevovo
+      supported_features: 7
+      state: open
+    cover.obyvak_velke_vpravo:
+      current_position: 40
+      friendly_name: Obyvak velke vpravoavo
+      supported_features: 7
+      state: open
+    cover.detsky_pokoj:
+      current_position: 20
+      friendly_name: Dětský pokoj
+      supported_features: 7
+      state: open
+    cover.kancelar:
+      current_position: 20
+      friendly_name: Kancelář
+      supported_features: 7
+      state: open
+  icon: mdi:sun-thermometer-outline
+  metadata: {}
+- id: '1694665877489'
+  name: Bedroom bright
+  entities:
+    light.gledopto_gl_c_008p_light_2:
+      min_color_temp_kelvin: 2020
+      max_color_temp_kelvin: 6329
+      min_mireds: 158
+      max_mireds: 495
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 6329
+      color_temp: 158
+      hs_color:
+      - 37.231
+      - 3.66
+      rgb_color:
+      - 255
+      - 251
+      - 245
+      xy_color:
+      - 0.331
+      - 0.335
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Bedroom main light Light
+      supported_features: 44
+      state: 'on'
+    light.bedroom_bed_lamp_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 6535
+      color_temp: 153
+      hs_color:
+      - 54.768
+      - 1.6
+      rgb_color:
+      - 255
+      - 254
+      - 250
+      xy_color:
+      - 0.326
+      - 0.333
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Bedroom bed lamp Light
+      supported_features: 40
+      state: 'on'
+  icon: mdi:bed
+  metadata: {}
+- id: '1694665942604'
+  name: Bedroom dark
+  entities:
+    light.gledopto_gl_c_008p_light_2:
+      min_color_temp_kelvin: 2020
+      max_color_temp_kelvin: 6329
+      min_mireds: 158
+      max_mireds: 495
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 23
+      color_temp_kelvin: 2020
+      color_temp: 495
+      hs_color:
+      - 30.512
+      - 93.472
+      rgb_color:
+      - 255
+      - 137
+      - 16
+      xy_color:
+      - 0.597
+      - 0.383
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Bedroom main light Light
+      supported_features: 44
+      state: 'on'
+    light.bedroom_bed_lamp_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 8
+      color_temp_kelvin: 2000
+      color_temp: 500
+      hs_color:
+      - 30.601
+      - 94.547
+      rgb_color:
+      - 255
+      - 136
+      - 13
+      xy_color:
+      - 0.599
+      - 0.382
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Bedroom bed lamp Light
+      supported_features: 40
+      state: 'on'
+  icon: mdi:bed
+  metadata: {}
+- id: '1697573981864'
+  name: Watching TV night
+  entities:
+    light.living_room_dining_spotlight_center_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 51
+      color_temp_kelvin: 2000
+      color_temp: 500
+      hs_color:
+      - 30.601
+      - 94.547
+      rgb_color:
+      - 255
+      - 136
+      - 13
+      xy_color:
+      - 0.599
+      - 0.382
+      effect:
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Living Room Dining Spotlight Center Light
+      supported_features: 44
+      state: 'on'
+    light.living_room_stand_light_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 38
+      color_temp_kelvin: 2000
+      color_temp: 500
+      hs_color:
+      - 30.601
+      - 94.547
+      rgb_color:
+      - 255
+      - 136
+      - 13
+      xy_color:
+      - 0.599
+      - 0.382
+      effect:
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Living Room Stand Light Light
+      supported_features: 44
+      state: 'on'
+    light.living_room_dining_light_big_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Living Room Dining Light Big Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_dining_spotlight_left_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Living Room Dining Spotlight Left Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_dining_spotlight_right_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Living Room Dining Spotlight Right Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_main_light_inner_light:
+      min_color_temp_kelvin: 2020
+      max_color_temp_kelvin: 6329
+      min_mireds: 158
+      max_mireds: 495
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: color_temp
+      brightness: 3
+      color_temp_kelvin: 2020
+      color_temp: 495
+      hs_color:
+      - 30.512
+      - 93.472
+      rgb_color:
+      - 255
+      - 137
+      - 16
+      xy_color:
+      - 0.597
+      - 0.383
+      effect:
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Living room main light inner Light
+      supported_features: 44
+      state: 'on'
+    light.living_room_main_light_outer_light:
+      min_color_temp_kelvin: 2020
+      max_color_temp_kelvin: 6329
+      min_mireds: 158
+      max_mireds: 495
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Living room main light outer Light
+      supported_features: 44
+      state: 'off'
+  icon: mdi:television-classic
+  metadata: {}
+- id: '1706771007029'
+  name: All lights downstairs turned off (except hall)
+  entities:
+    light.living_room_dining_light_big_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: true
+      off_brightness: 254
+      friendly_name: Living Room Dining Light Big Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_dining_spotlight_left_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: true
+      off_brightness: 254
+      friendly_name: Living Room Dining Spotlight Left Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_dining_spotlight_right_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: true
+      off_brightness: 254
+      friendly_name: Living Room Dining Spotlight Right Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_dining_spotlight_center_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: true
+      off_brightness: 51
+      friendly_name: Living Room Dining Spotlight Center Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_main_light_inner_light:
+      min_color_temp_kelvin: 2020
+      max_color_temp_kelvin: 6329
+      min_mireds: 158
+      max_mireds: 495
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: true
+      off_brightness: 3
+      friendly_name: Living room main light inner Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_main_light_outer_light:
+      min_color_temp_kelvin: 2020
+      max_color_temp_kelvin: 6329
+      min_mireds: 158
+      max_mireds: 495
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: true
+      off_brightness: 127
+      friendly_name: Living room main light outer Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_stand_light_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 97
+      friendly_name: Living Room Stand Light Light
+      supported_features: 44
+      state: 'off'
+    light.living_room_kaja_light_level_light_color_on_off:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: Living room kaja light level, light_color, on_off
+      supported_features: 44
+      state: unavailable
+    light.kitchen_counter_top_light:
+      supported_color_modes:
+      - onoff
+      color_mode:
+      friendly_name: Kitchen Counter Top Light
+      supported_features: 0
+      state: 'off'
+    light.kitchen_light_light:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      off_with_transition: true
+      off_brightness: 1
+      friendly_name: Kitchen Light Light
+      supported_features: 40
+      state: 'off'
+    light.tasmota_toilet_light:
+      supported_color_modes:
+      - onoff
+      color_mode:
+      friendly_name: Tasmota Toilet Light
+      supported_features: 0
+      state: 'off'
+  icon: mdi:lightbulb-off-outline
+  metadata: {}
