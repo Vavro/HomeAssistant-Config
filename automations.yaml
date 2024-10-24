@@ -671,23 +671,25 @@
   actions:
   - action: media_player.play_media
     target:
-      entity_id: media_player.living_room_soundbar
+      entity_id: media_player.living_room_speaker
     data:
       media_content_id: media-source://radio_browser/1b568695-9ce7-493d-ba72-d9b3d5e0a364
       media_content_type: audio/mpeg
-    metadata: {}
+    metadata:
+      title: Evropa 2 - Radio
+      thumbnail: https://m.actve.net/e2/favicon/apple-touch-icon.png
+      media_class: music
+      children_media_class:
+      navigateIds:
+      - {}
+      - media_content_type: app
+        media_content_id: media-source://radio_browser
+      - media_content_type: music
+        media_content_id: media-source://radio_browser/country/CZ
   - action: media_player.volume_set
     metadata: {}
     data:
-      volume_level: 0.1
+      volume_level: 0.3
     target:
-      entity_id: media_player.living_room_soundbar
-  - action: media_player.play_media
-    metadata: {}
-    data:
-      media_content_id: ''
-      media_content_type: ''
-    target:
-      entity_id: media_player.living_room_speaker
-    enabled: false
+      device_id: 55783b7df92e11eabf886bf57f72e81e
   mode: single
