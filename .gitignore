@@ -56,3 +56,12 @@ diyhue
 
 #hassemulatedhue has secrets in the only config file
 hass-emulated-hue
+
+# Runtime files
+.ha_run.lock
+
+# Cached integration brand icons and metadata (auto-downloaded by HA)
+.cache/
+
+# Local backup data
+onlineBackupsData/
