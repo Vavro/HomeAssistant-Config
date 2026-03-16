@@ -328,28 +328,30 @@
       integration: ZHA
       controller_device: a12a49d2ec994ed48054b53815eecfb8
       action_button_up_short:
-      - service: script.cover_step
-        data:
-          cover: cover.obyvak_velke_vlevo
+      - data:
+          cover: cover.living_room_shutters
           move_direction: Up
           step_size: 20
+        action: script.cover_step
       action_button_down_short:
-      - service: script.cover_step
-        data:
-          cover: cover.obyvak_velke_vlevo
+      - data:
+          cover: cover.living_room_shutters
           move_direction: Down
           step_size: 20
+        action: script.cover_step
       action_button_down_long:
-      - device_id: b618c86ec179a620f134c6d185c2694c
-        domain: cover
-        entity_id: e32930222c4d544e1497e49c533854de
-        type: close
+      - action: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.living_room_shutters
       action_button_down_release: []
       action_button_up_long:
-      - device_id: b618c86ec179a620f134c6d185c2694c
-        domain: cover
-        entity_id: e32930222c4d544e1497e49c533854de
-        type: open
+      - action: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.living_room_shutters
       action_button_up_release: []
       helper_last_controller_event: input_text.living_room_shutter_control_text_helper
 - id: '1691156616099'
@@ -364,6 +366,7 @@
       action_button_up_double: []
       button_up_double_press: true
       button_down_double_press: true
+      helper_debounce_delay: 75
 - id: '1691157723658'
   alias: Kids Room Oliver's bed light control hook
   description: ''
@@ -382,6 +385,7 @@
       controller_device: 0991f609a00c3e35f4b84d67c37d4b1c
       helper_last_controller_event: input_text.office_remote_controller_helper
       integration: ZHA
+      helper_debounce_delay: 75
 - id: '1691387606370'
   alias: Office Lights Control Hook
   description: ''
@@ -501,21 +505,21 @@
       on_brightness: 22
       force_brightness: false
 - id: '1703257416987'
-  alias: Toilet heater turn off after 10 minutes
+  alias: Toilet heater turn off after 1hour
   description: Whenever heater in toilet is turned on, it will be turned off after
     10 minute
-  trigger:
-  - platform: device
-    type: turned_on
+  triggers:
+  - type: turned_on
     device_id: 7db3c1ec10143e0c221f0506f3837606
     entity_id: c857b9eedd871add9b323d37c77d7e8e
     domain: light
     for:
-      hours: 0
-      minutes: 30
+      hours: 1
+      minutes: 0
       seconds: 0
-  condition: []
-  action:
+    trigger: device
+  conditions: []
+  actions:
   - type: turn_off
     device_id: 7db3c1ec10143e0c221f0506f3837606
     entity_id: c857b9eedd871add9b323d37c77d7e8e
@@ -561,6 +565,7 @@
       action_button_up_double: []
       button_up_double_press: true
       button_down_double_press: true
+      helper_debounce_delay: 75
 - id: '1714819638596'
   alias: Kids room shutter control
   description: ''
@@ -570,28 +575,30 @@
       integration: ZHA
       controller_device: 9726976ff749239cee62db44ed8e3892
       action_button_up_short:
-      - service: script.cover_step
-        data:
+      - data:
           cover: cover.detsky_pokoj
           move_direction: Up
           step_size: 20
+        action: script.cover_step
       action_button_down_short:
-      - service: script.cover_step
-        data:
+      - data:
           cover: cover.detsky_pokoj
           move_direction: Down
           step_size: 20
+        action: script.cover_step
       action_button_down_long:
-      - device_id: 455916ef4b4cfbdc1fc764dfeb226b7f
-        domain: cover
-        entity_id: 07015bed54bb893d1edc23f48ae7eb41
-        type: close
+      - action: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          device_id: 172f4d331db16d9bdb48395feaca97bf
       action_button_down_release: []
       action_button_up_long:
-      - device_id: 455916ef4b4cfbdc1fc764dfeb226b7f
-        domain: cover
-        entity_id: 07015bed54bb893d1edc23f48ae7eb41
-        type: open
+      - action: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          device_id: 172f4d331db16d9bdb48395feaca97bf
       action_button_up_release: []
       helper_last_controller_event: input_text.kids_room_shutter_controller_helper
 - id: '1714821318449'
@@ -603,28 +610,30 @@
       integration: ZHA
       controller_device: 697ca14c6640f0a3bd5e96e76f9fea37
       action_button_up_short:
-      - service: script.cover_step
-        data:
+      - data:
           cover: cover.kancelar
           move_direction: Up
           step_size: 20
+        action: script.cover_step
       action_button_down_short:
-      - service: script.cover_step
-        data:
+      - data:
           cover: cover.kancelar
           move_direction: Down
           step_size: 20
+        action: script.cover_step
       action_button_down_long:
-      - device_id: bf3983f1371a56c4c5b36ee56ba27bd0
-        domain: cover
-        entity_id: b8803ee61786e8e59c1acb144c5169ea
-        type: close
+      - action: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          device_id: cf5a635c6e2e174bea8405c22bf8bef4
       action_button_down_release: []
       action_button_up_long:
-      - device_id: bf3983f1371a56c4c5b36ee56ba27bd0
-        domain: cover
-        entity_id: b8803ee61786e8e59c1acb144c5169ea
-        type: open
+      - action: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          device_id: cf5a635c6e2e174bea8405c22bf8bef4
       action_button_up_release: []
       helper_last_controller_event: input_text.office_shutter_control_text_helper
 - id: '1728585593651'
@@ -668,6 +677,13 @@
     - fri
     before: 06:45:00
     after: 05:55:00
+  - condition: not
+    conditions:
+    - condition: device
+      device_id: 55783b7df92e11eabf886bf57f72e81e
+      domain: media_player
+      entity_id: f24e24c6be67eedf11915c554bd13048
+      type: is_playing
   actions:
   - action: media_player.play_media
     target:
@@ -692,4 +708,78 @@
       volume_level: 0.3
     target:
       device_id: 55783b7df92e11eabf886bf57f72e81e
+  mode: single
+- id: '1734246047036'
+  alias: Car integration unavailable
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - device_tracker.530d_xdrive
+    to: unavailable
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: 530xd unavailable
+      title: Car unavailable
+      target: mobile_app_sm_s711b
+  mode: single
+- id: '1744780129269'
+  alias: Vacuum when we leave in the morning
+  description: ''
+  triggers:
+  - device_id: 0aaed5045a38a1739b8464e215444760
+    domain: device_tracker
+    entity_id: 1b083b3bf611cad1bcf6a427f74b0731
+    type: leaves
+    trigger: device
+    zone: zone.home
+  - device_id: aeecd0453141e56f053d62423e7a004d
+    domain: device_tracker
+    entity_id: 1315f7b56b5745aedc0917aac950294c
+    type: leaves
+    trigger: device
+    zone: zone.home
+  - device_id: ce81e880283d360722860d359c76cfaf
+    domain: device_tracker
+    entity_id: 6a45a50c308f437854534adfac7fde74
+    type: leaves
+    trigger: device
+    zone: zone.home
+  conditions:
+  - condition: device
+    device_id: 0aaed5045a38a1739b8464e215444760
+    domain: device_tracker
+    entity_id: 1b083b3bf611cad1bcf6a427f74b0731
+    type: is_not_home
+  - condition: device
+    device_id: aeecd0453141e56f053d62423e7a004d
+    domain: device_tracker
+    entity_id: 1315f7b56b5745aedc0917aac950294c
+    type: is_not_home
+  - condition: time
+    after: 06:45:00
+    before: 09:00:00
+    weekday:
+    - mon
+    - tue
+    - wed
+    - fri
+    - thu
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: vacuum.q8_max
+      state: cleaning
+  actions:
+  - device_id: c7c734227ef404fb8341bef41dc72543
+    domain: button
+    entity_id: 49ba2d7651ddc67bae52a796f6843182
+    type: press
   mode: single
