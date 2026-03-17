@@ -147,6 +147,27 @@ ssh root@homeassistant.local "cd /homeassistant && git pull && ha core check && 
 
 If `ha core check` fails, **do not restart** — diagnose and fix the config error first. A failed restart can leave HA in a broken state.
 
+## Tool Permission Policy
+
+These rules govern when Copilot should proceed automatically vs. pause and ask the user.
+
+### Auto-approve (proceed without asking)
+- All SSH read operations: `jq`, `grep`, `ls`, `cat` on HA files; `ha core logs`; `ha addons list/info`; `ha core check`
+- Local git: `status`, `log`, `diff`, `checkout`, `pull`, `branch`, `add`, `commit`, `push` to feature branches
+- GitHub: `gh issue create`, `gh pr create`, `gh issue comment`, `gh issue reopen`
+- Local file reads and edits on git-tracked files
+- Web search
+
+### Always ask the user first
+- **Writing to `.storage/` files** on the HA instance — these are live HA config files; corrupt JSON breaks entities and integrations
+- **`ha core restart`** — causes ~60s production downtime
+- **`git pull` on the HA instance** — deploys code to production
+- **`gh issue close`** — closing issues is harder to notice than creating them
+
+### Notes
+- `.storage/` contains ALL UI-managed HA config: dashboards, entity registry, device registry, all integration credentials (config entries), helpers, auth. It is NOT just Lovelace.
+- When the `ha-deploy` skill exists, use it for the pull→check→restart sequence — it provides guardrails and SSH is always available even if HA core fails to start (SSH addon is a separate supervisor process).
+
 ## Diagnosing Automation Problems
 
 ### Downloading Traces
