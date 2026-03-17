@@ -152,17 +152,21 @@ If `ha core check` fails, **do not restart** — diagnose and fix the config err
 These rules govern when Copilot should proceed automatically vs. pause and ask the user.
 
 ### Auto-approve (proceed without asking)
-- All SSH read operations: `jq`, `grep`, `ls`, `cat` on HA files; `ha core logs`; `ha addons list/info`; `ha core check`
-- Local git: `status`, `log`, `diff`, `checkout`, `pull`, `branch`, `add`, `commit`, `push` to feature branches
+- All SSH read operations: `jq`, `grep`, `ls`, `cat` on HA files; `ha core logs`; `ha addons list/info`; `ha core check` — use the **ha-investigate skill** so these are wrapped in one approved invocation rather than individual SSH prompts
+- Local git (non-push): `status`, `log`, `diff`, `checkout`, `pull`, `branch`, `add`, `commit`, `fetch`, `merge`, `stash`
 - GitHub: `gh issue create`, `gh pr create`, `gh issue comment`, `gh issue reopen`
 - Local file reads and edits on git-tracked files
 - Web search
 
 ### Always ask the user first
+- **`git push`** (any variant) — always show the full command so the user can spot `--force`, `--force-with-lease`, or `--delete` before it runs. History-rewriting commands (`git reset --hard`, `git commit --amend`, `git push --force`, `git branch -D`) must never be auto-approved. `git rebase` is fine to auto-approve.
 - **Writing to `.storage/` files** on the HA instance — these are live HA config files; corrupt JSON breaks entities and integrations
 - **`ha core restart`** — causes ~60s production downtime
 - **`git pull` on the HA instance** — deploys code to production
 - **`gh issue close`** — closing issues is harder to notice than creating them
+
+### Note on current Copilot CLI limitations
+Copilot CLI `shell()` patterns match at the subcommand level (`git push`) but not argument level (`git push --force`). Until argument-level matching is supported, requiring approval for ALL `git push` is the safest approach — the approval prompt shows the full command so dangerous flags are visible. Track: `shell(git push --force)` deny rule when CLI adds argument matching.
 
 ### Notes
 - `.storage/` contains ALL UI-managed HA config: dashboards, entity registry, device registry, all integration credentials (config entries), helpers, auth. It is NOT just Lovelace.
