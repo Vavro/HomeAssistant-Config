@@ -18,6 +18,9 @@ python .github/skills/ha-deploy/deploy.py --check-only
 
 # Restart only (skip pull) — if HA is already on latest but needs a restart
 python .github/skills/ha-deploy/deploy.py --restart-only
+
+# Override SSH target or repo path (or set HA_HOST / HA_REPO_DIR env vars)
+python .github/skills/ha-deploy/deploy.py --host root@192.168.1.x --repo-dir /homeassistant
 ```
 
 ## What it does
@@ -32,7 +35,7 @@ python .github/skills/ha-deploy/deploy.py --restart-only
 
 - **Config check MUST pass** before restart is attempted
 - If HA doesn't come back within 120s, SSH is still available (SSH addon is a separate supervisor process — it survives HA core failures)
-- Rollback: `git revert HEAD --no-edit && ha core check && ha core restart`
+- Rollback: `ssh root@homeassistant.local "cd /homeassistant && git fetch origin && git reset --hard origin/master && ha core check && ha core restart"`
 
 ## When NOT to use this skill
 

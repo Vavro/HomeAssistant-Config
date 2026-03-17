@@ -204,7 +204,7 @@ Physical button press
   → Hook blueprint  (maps abstract action → light.turn_off / light.turn_on etc.)
 ```
 
-Controller blueprints live in `/config/blueprints/automation/EPMatt/`:
+Controller blueprints live in `/homeassistant/blueprints/automation/EPMatt/`:
 - `philips_324131092621.yaml` — Philips Hue RWL021 dimmer
 - `ikea_e2001_e2002_new.yaml` — IKEA STYRBAR (E2001/E2002)
 

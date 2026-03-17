@@ -16,9 +16,12 @@ Usage:
 import subprocess
 import sys
 import argparse
-import json
+import os
+import re
+import shlex
 
-HA_HOST = "root@homeassistant.local"
+HA_HOST = os.environ.get("HA_HOST", "root@homeassistant.local")
+SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=3"]
 
 # Safelist of .storage keys allowed to be read
 ALLOWED_STORAGE = {
@@ -34,17 +37,50 @@ ALLOWED_STORAGE = {
     "core.config_entries",
 }
 
-# Safelist of file paths allowed to be read from HA instance
+# Safelist of file path prefixes allowed to be read from HA instance
 ALLOWED_FILE_PREFIXES = (
     "/homeassistant/",
     "/config/",
     "/tmp/",
 )
 
+# Validation patterns
+_RE_CONFIG_ENTRY_ID = re.compile(r'^[A-Z0-9]{26}$')
+_RE_DOMAIN = re.compile(r'^[a-z][a-z0-9_]*$')
+
+
+def _validate_config_entry_id(value: str) -> str:
+    if not _RE_CONFIG_ENTRY_ID.match(value):
+        print(f"Error: invalid config entry ID '{value}' (expected 26 uppercase alphanumeric chars)", file=sys.stderr)
+        sys.exit(1)
+    return value
+
+
+def _validate_domain(value: str) -> str:
+    if not _RE_DOMAIN.match(value):
+        print(f"Error: invalid domain '{value}' (expected lowercase letters, digits, underscores)", file=sys.stderr)
+        sys.exit(1)
+    return value
+
+
+def _validate_file_path(path: str) -> str:
+    """Normalize path, reject traversal, verify against safelist prefixes."""
+    normalized = os.path.normpath(path)
+    # Reject any path with remaining .. components after normalization
+    if ".." in normalized.split(os.sep):
+        print(f"Error: path traversal detected in '{path}'", file=sys.stderr)
+        sys.exit(1)
+    # normpath on Linux uses / separator; force it
+    normalized = normalized.replace("\\", "/")
+    if not any(normalized.startswith(p) for p in ALLOWED_FILE_PREFIXES):
+        print(f"Error: path '{normalized}' not under allowed prefixes: {ALLOWED_FILE_PREFIXES}", file=sys.stderr)
+        sys.exit(1)
+    return normalized
+
 
 def ssh(cmd: str) -> str:
     result = subprocess.run(
-        ["ssh", HA_HOST, cmd],
+        ["ssh", *SSH_OPTS, HA_HOST, cmd],
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -68,7 +104,9 @@ def cmd_logs(args):
     lines = getattr(args, "lines", 50)
     pattern = getattr(args, "filter", None)
     if pattern:
-        out = ssh(f"ha core logs 2>/dev/null | grep -i '{pattern}' | tail -{lines}")
+        # Use shlex.quote to safely pass the pattern to the remote shell
+        quoted_pattern = shlex.quote(pattern)
+        out = ssh(f"ha core logs 2>/dev/null | grep -i {quoted_pattern} | tail -{lines}")
     else:
         out = ssh(f"ha core logs 2>/dev/null | tail -{lines}")
     print(out)
@@ -80,13 +118,18 @@ def cmd_entities(args):
     domain = getattr(args, "domain", None)
 
     if config_entry:
-        jq_filter = f'.data.entities[] | select(.config_entry_id=="{config_entry}") | .entity_id'
+        _validate_config_entry_id(config_entry)
+        # Use jq --arg to avoid interpolating user input into the jq program
+        out = ssh(f"jq -r --arg id {shlex.quote(config_entry)} "
+                  f"'.data.entities[] | select(.config_entry_id==$id) | .entity_id' "
+                  f"/homeassistant/.storage/core.entity_registry 2>/dev/null | sort")
     elif domain:
-        jq_filter = f'.data.entities[] | select(.entity_id | startswith("{domain}.")) | .entity_id'
+        _validate_domain(domain)
+        out = ssh(f"jq -r --arg prefix {shlex.quote(domain + '.')} "
+                  f"'.data.entities[] | select(.entity_id | startswith($prefix)) | .entity_id' "
+                  f"/homeassistant/.storage/core.entity_registry 2>/dev/null | sort")
     else:
-        jq_filter = ".data.entities[] | .entity_id"
-
-    out = ssh(f"jq -r '{jq_filter}' /homeassistant/.storage/core.entity_registry 2>/dev/null | sort")
+        out = ssh("jq -r '.data.entities[] | .entity_id' /homeassistant/.storage/core.entity_registry 2>/dev/null | sort")
     print(out)
 
 
@@ -94,21 +137,25 @@ def cmd_config_entries(args):
     """List config entries, optionally filtered by domain."""
     domain = getattr(args, "domain", None)
     if domain:
-        jq_filter = f'.data.entries[] | select(.domain=="{domain}") | {{domain, title, state, source}}'
+        _validate_domain(domain)
+        out = ssh(f"jq --arg domain {shlex.quote(domain)} "
+                  f"'.data.entries[] | select(.domain==$domain) | {{domain, title, state, source}}' "
+                  f"/homeassistant/.storage/core.config_entries 2>/dev/null")
     else:
-        jq_filter = '.data.entries[] | {domain, title, state}'
-    out = ssh(f"jq '{jq_filter}' /homeassistant/.storage/core.config_entries 2>/dev/null")
+        out = ssh("jq '.data.entries[] | {domain, title, state}' /homeassistant/.storage/core.config_entries 2>/dev/null")
     print(out)
 
 
 def cmd_lovelace(args):
-    """Dump Lovelace dashboard config."""
+    """Show Lovelace dashboard view summary."""
     dashboard = getattr(args, "dashboard", None) or "lovelace_domov"
-    key = f"lovelace.{dashboard}" if not dashboard.startswith("lovelace") else dashboard
+    key = f"lovelace.{dashboard}" if not dashboard.startswith("lovelace.") else dashboard
     if key not in ALLOWED_STORAGE:
         print(f"Error: '{key}' not in allowed storage safelist: {sorted(ALLOWED_STORAGE)}", file=sys.stderr)
         sys.exit(1)
-    out = ssh(f"jq '.data.config.views | to_entries | .[] | {{index: .key, path: .value.path, title: .value.title, icon: .value.icon, cards: (.value.cards | length)}}' /homeassistant/.storage/{key} 2>/dev/null")
+    out = ssh(f"jq '.data.config.views | to_entries | .[] | "
+              f"{{index: .key, path: .value.path, title: .value.title, icon: .value.icon, cards: (.value.cards | length)}}' "
+              f"/homeassistant/.storage/{key} 2>/dev/null")
     print(out)
 
 
@@ -125,11 +172,8 @@ def cmd_storage(args):
 
 def cmd_file(args):
     """Read a file from the HA instance (safelisted path prefixes only)."""
-    path = args.path
-    if not any(path.startswith(p) for p in ALLOWED_FILE_PREFIXES):
-        print(f"Error: path '{path}' not under allowed prefixes: {ALLOWED_FILE_PREFIXES}", file=sys.stderr)
-        sys.exit(1)
-    out = ssh(f"cat '{path}' 2>/dev/null")
+    path = _validate_file_path(args.path)
+    out = ssh(f"cat {shlex.quote(path)} 2>/dev/null")
     print(out)
 
 
@@ -144,14 +188,14 @@ def main():
     p_logs.add_argument("--lines", type=int, default=50, help="Number of lines (default: 50)")
 
     p_ent = sub.add_parser("entities", help="List entities")
-    p_ent.add_argument("--config-entry", metavar="ID", help="Filter by config entry ID")
+    p_ent.add_argument("--config-entry", metavar="ID", help="Filter by config entry ID (26-char alphanumeric)")
     p_ent.add_argument("--domain", help="Filter by domain (e.g. sensor, binary_sensor)")
 
     p_ce = sub.add_parser("config-entries", help="List config entries")
     p_ce.add_argument("--domain", help="Filter by integration domain")
 
     p_lv = sub.add_parser("lovelace", help="Show Lovelace dashboard view summary")
-    p_lv.add_argument("--dashboard", default="lovelace_domov", help="Dashboard storage key suffix")
+    p_lv.add_argument("--dashboard", default="lovelace_domov", help="Dashboard name (default: lovelace_domov)")
 
     p_st = sub.add_parser("storage", help="Read a .storage file (safelisted)")
     p_st.add_argument("key", help=f"Storage key. Allowed: {sorted(ALLOWED_STORAGE)}")
