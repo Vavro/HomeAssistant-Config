@@ -1,0 +1,32 @@
+{
+  "trace": {
+    "last_step": "(init)",
+    "run_id": "abc001",
+    "state": "stopped",
+    "script_execution": "aborted",
+    "timestamp": {"start": "2026-03-16T20:55:12.512199+00:00"},
+    "domain": "automation",
+    "item_id": "hook_living_room_light",
+    "trigger": "event 'ahb_controller_event'",
+    "error": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'",
+    "config": {
+      "id": "hook_living_room_light",
+      "alias": "Living room main light remote control hook"
+    },
+    "blueprint_inputs": {
+      "blueprint": {"path": "EPMatt/light_new.yaml"}
+    },
+    "trace": {
+      "trigger/0": [{"path": "trigger/0", "timestamp": "2026-03-16T20:55:12.600000+00:00", "changed_variables": {}}],
+      "variables": [{"path": "variables", "timestamp": "2026-03-16T20:55:12.610000+00:00", "error": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'", "changed_variables": {
+        "turn_on": "button_on_short",
+        "turn_off": "button_off_short",
+        "current_temp": null,
+        "min_temp": null,
+        "max_temp": null
+      }}]
+    },
+    "context": {"id": "ctx001"}
+  },
+  "logbookEntries": []
+}
