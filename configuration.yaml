@@ -46,13 +46,9 @@ api:
 #zha_toolkit is now enabled through HACS custom components
 #zha_toolkit:
 
-#enable influxdb integration with all defaults
+# InfluxDB: connection details managed via UI (Settings → Devices & Services → InfluxDB)
+# Removed host/port/database/username/password - migrated to UI in HA 2026.3 (required before 2026.9)
 influxdb:
-  host: a0d7b954-influxdb
-  port: 8086
-  database: homeassistant
-  username: !secret influxdb_homeassistant_username
-  password: !secret influxdb_homeassistant_password
   max_retries: 3
   default_measurement: state
 
