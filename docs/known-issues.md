@@ -6,7 +6,7 @@ A running log of breaking changes encountered during HA/integration updates and 
 
 ## How to use this file
 
-When a HA update, integration update, or blueprint change breaks something:
+When an HA update, integration update, or blueprint change breaks something:
 1. Diagnose using the trace analyzer (see [`SKILL.md`](../.github/skills/analyze-ha-traces/SKILL.md))
 2. Apply the fix
 3. Add an entry here **in the PR that contains the fix**, so the log stays in sync with the actual changes
@@ -58,4 +58,4 @@ When a HA update, integration update, or blueprint change breaks something:
 
 **Why 75ms works:** The automation uses `mode: restart` — a new trigger cancels the previous run. With 75ms debounce, the first run is killed by the second event (at ~35–60ms) before it writes the helper, so the second run sees the old (large) delta and correctly fires single press. Genuine human double presses are naturally >150ms apart, so they still work.
 
-**Also updated:** Default `helper_debounce_delay` in `ikea_e2001_e2002_new.yaml` blueprint changed from `0` to `100` so new automations created from the blueprint are protected by default.
+**Follow-up recommendation:** Set `helper_debounce_delay` to `75-100` for any new STYRBAR automations created from the blueprint. The currently working automations were adjusted manually in HA UI to `75`.
