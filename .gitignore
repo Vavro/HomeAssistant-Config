@@ -1,3 +1,9 @@
+# Trace files and local backups (diagnostic artifacts, not config)
+trace *.json
+trace automation*.json
+backup */
+backup *.tar
+
 # Files with personal details
 *.crt
 *.csr
