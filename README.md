@@ -148,4 +148,4 @@ python .github/skills/analyze-ha-traces/tests/test_analyze_trace.py
 |---------|----------------|-----|
 | HA 2026.3 | `color_temp` / `min_mireds` / `max_mireds` light attributes removed | `light_new.yaml` migrated to `color_temp_kelvin` / `min_color_temp_kelvin` / `max_color_temp_kelvin` |
 | zigpy 1.0.0 (Feb 2026) | Philips RWL021 OFF button renamed from `off_short_release` → `off_with_effect` | Added `- off_with_effect` to `button_off_short` mapping in Philips blueprint |
-| zigpy 1.0.0 (Feb 2026) | IKEA STYRBAR sends duplicate ZHA events ~35–60ms apart per press | `helper_debounce_delay = 100ms` set on all STYRBAR controller automations |
+| zigpy 1.0.0 (Feb 2026) | IKEA STYRBAR sends duplicate ZHA events ~35–60ms apart per press | `helper_debounce_delay = 75ms` set on all STYRBAR controller automations |
