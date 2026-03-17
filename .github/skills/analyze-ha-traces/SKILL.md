@@ -84,3 +84,58 @@ Blueprint files live in `/config/blueprints/automation/EPMatt/` on the HA instan
 - `light.yaml` — original EPMatt hook (not used)
 
 After editing any blueprint: Developer Tools → YAML → Reload Automations.
+
+## Developing and extending this skill
+
+### Directory structure
+
+```
+.github/skills/analyze-ha-traces/
+  analyze_trace.py        ← main analyzer script
+  SKILL.md                ← this file
+  tests/
+    test_analyze_trace.py ← test runner
+    fixtures/             ← minimal anonymized trace JSON files
+      hook_init_crash_color_temp.json
+      controller_duplicate_zha_event.json
+      hook_success_turn_off.json
+      controller_no_branch_matched.json
+```
+
+### Running tests
+
+```bash
+python .github/skills/analyze-ha-traces/tests/test_analyze_trace.py
+```
+
+All tests must pass before pushing changes to the analyzer.
+
+### Adding a new test case
+
+1. **Save a real trace as a fixture** in `tests/fixtures/<descriptive_name>.json`
+   - Anonymize `device_ieee` and `entity_id` if desired (not required — no secrets in traces)
+   - Keep only the trace nodes needed to reproduce the scenario (trigger, variables, key action nodes)
+   - Name it after the scenario: `hook_success_turn_on.json`, `controller_off_with_effect.json` etc.
+
+2. **Add a test function** in `test_analyze_trace.py`:
+   ```python
+   def test_my_scenario():
+       """One-line description of what this tests and why the fixture exists."""
+       out = run("my_fixture.json")
+       check(
+           "my_scenario",
+           out,
+           must_contain=["expected string", "another string"],
+           must_not_contain=["string that must not appear"],
+       )
+   ```
+
+3. **Call it** at the bottom of the file and run the suite.
+
+### What makes a good fixture
+
+- **Minimal** — only the trace nodes that matter for the scenario
+- **Self-contained** — no external dependencies
+- **Documented** — the test docstring explains what broke, what the root cause was, and what the fix was
+- The `config.alias` field should be a realistic automation name so name detection is tested too
+

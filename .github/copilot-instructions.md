@@ -114,7 +114,7 @@ Dashboard configuration lives in `ui-lovelace.yaml` (storage mode stores it in `
 | HA instance (deploy key) | Automations edited via HA UI | Push directly to `master` |
 | Local machine / Copilot | Blueprints, config, scripts, new features | Feature branch → PR → merge |
 
-**Before opening a PR:** run the code-review skill to catch issues.  
+**Before opening a PR:** use the `analyze-ha-traces` skill to verify any automation changes work correctly, and rely on the Copilot automated PR review for code quality.  
 **Never push directly to `master` from local** — use a PR even for small changes.
 
 ### Typical Local Workflow

@@ -1,0 +1,47 @@
+{
+  "trace": {
+    "last_step": "action/1/choose/2/sequence/0",
+    "run_id": "abc003",
+    "state": "stopped",
+    "script_execution": "finished",
+    "timestamp": {"start": "2026-03-16T21:00:00.000000+00:00"},
+    "domain": "automation",
+    "item_id": "hook_living_room_light",
+    "trigger": "event 'ahb_controller_event'",
+    "config": {
+      "id": "hook_living_room_light",
+      "alias": "Living room main light remote control hook"
+    },
+    "blueprint_inputs": {
+      "blueprint": {"path": "EPMatt/light_new.yaml"}
+    },
+    "trace": {
+      "trigger/0": [{"path": "trigger/0", "timestamp": "2026-03-16T21:00:00.100000+00:00", "changed_variables": {}}],
+      "action/0": [{"path": "action/0", "timestamp": "2026-03-16T21:00:00.110000+00:00", "changed_variables": {"context": {}}}],
+      "action/1": [{"path": "action/1", "timestamp": "2026-03-16T21:00:00.120000+00:00", "changed_variables": {
+        "action": "button_off_short",
+        "turn_on": "button_on_short",
+        "turn_off": "button_off_short",
+        "brightness_up_repeat": "button_up_long",
+        "brightness_down_repeat": "button_down_long",
+        "light_color_mode_id": "color_temp",
+        "current_temp": 4000,
+        "min_temp": 2000,
+        "max_temp": 6500,
+        "smooth_power_off": true,
+        "force_brightness": false
+      }}],
+      "action/1/choose/2": [{"path": "action/1/choose/2", "timestamp": "2026-03-16T21:00:00.130000+00:00", "result": {"result": true}}],
+      "action/1/choose/2/sequence/0": [{"path": "action/1/choose/2/sequence/0", "timestamp": "2026-03-16T21:00:00.140000+00:00", "result": {
+        "params": {
+          "domain": "light",
+          "service": "turn_off",
+          "service_data": {"transition": 0.25},
+          "target": {"entity_id": ["light.living_room_main_light"]}
+        }
+      }}]
+    },
+    "context": {"id": "ctx003"}
+  },
+  "logbookEntries": []
+}

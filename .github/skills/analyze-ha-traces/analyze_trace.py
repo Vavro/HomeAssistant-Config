@@ -5,8 +5,8 @@ HA Automation Trace Analyzer
 Analyzes Home Assistant automation trace JSON files downloaded from the HA UI.
 
 Usage:
-    python scripts/analyze_trace.py <trace_file.json> [more_files ...]
-    python scripts/analyze_trace.py .          # all trace *.json in current dir
+    python .github/skills/analyze-ha-traces/analyze_trace.py <trace_file.json> [more_files ...]
+    python .github/skills/analyze-ha-traces/analyze_trace.py .   # all trace *.json in current dir
 
 Pass controller + hook traces together to see the full event chain.
 

@@ -1,0 +1,53 @@
+{
+  "trace": {
+    "last_step": "action/3/choose/9/sequence/0/choose/0/sequence/0/choose/0/sequence/1",
+    "run_id": "abc002",
+    "state": "stopped",
+    "script_execution": "finished",
+    "timestamp": {"start": "2026-03-16T22:27:57.602048+00:00"},
+    "domain": "automation",
+    "item_id": "kids_room_table_light_controller",
+    "trigger": "event 'zha_event'",
+    "config": {
+      "id": "kids_room_table_light_controller",
+      "alias": "Kids Room table light controller"
+    },
+    "blueprint_inputs": {
+      "blueprint": {"path": "EPMatt/ikea_e2001_e2002_new.yaml"}
+    },
+    "trace": {
+      "trigger/1": [{"path": "trigger/1", "timestamp": "2026-03-16T22:27:57.800000+00:00", "changed_variables": {
+        "trigger": {
+          "event": {
+            "data": {
+              "device_ieee": "30:fb:10:ff:fe:d5:aa:f2",
+              "device_id": "2f6c1ca0a3ab798d307e5b4543903a9d",
+              "unique_id": "30:fb:10:ff:fe:d5:aa:f2:1:0x0006",
+              "endpoint_id": 1,
+              "cluster_id": 6,
+              "command": "off",
+              "args": [],
+              "params": {}
+            }
+          }
+        }
+      }}],
+      "action/0": [{"path": "action/0", "timestamp": "2026-03-16T22:27:57.810000+00:00", "changed_variables": {"context": {}}}],
+      "action/1": [{"path": "action/1", "timestamp": "2026-03-16T22:27:57.820000+00:00", "changed_variables": {
+        "trigger_action": "off",
+        "trigger_delta": 34.7,
+        "helper_debounce_delay": 0,
+        "helper_double_press_delay": 500,
+        "adjusted_double_press_delay": 500,
+        "button_up_double_press": true,
+        "button_down_double_press": true,
+        "button_left_double_press": false,
+        "button_right_double_press": false
+      }}],
+      "action/3/choose/9": [{"path": "action/3/choose/9", "timestamp": "2026-03-16T22:27:57.830000+00:00", "result": {"result": true}}],
+      "action/3/choose/9/sequence/0/choose/0/sequence/0/choose/0/sequence/1": [{"path": "action/3/choose/9/sequence/0/choose/0/sequence/0/choose/0/sequence/1", "timestamp": "2026-03-16T22:27:57.840000+00:00", "result": {"event": "ahb_controller_event", "event_data": {"controller": "2f6c1ca0a3ab798d307e5b4543903a9d", "action": "button_down_double"}}}]
+    },
+    "context": {"id": "ctx002"}
+  },
+  "logbookEntries": []
+}

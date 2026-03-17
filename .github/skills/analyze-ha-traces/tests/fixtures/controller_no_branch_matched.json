@@ -1,0 +1,54 @@
+{
+  "trace": {
+    "last_step": "action/2",
+    "run_id": "abc004",
+    "state": "stopped",
+    "script_execution": "finished",
+    "timestamp": {"start": "2026-03-16T20:07:05.085049+00:00"},
+    "domain": "automation",
+    "item_id": "living_room_main_light_controller",
+    "trigger": "event 'zha_event'",
+    "config": {
+      "id": "living_room_main_light_controller",
+      "alias": "Living room main light remote control"
+    },
+    "blueprint_inputs": {
+      "blueprint": {"path": "EPMatt/philips_324131092621.yaml"}
+    },
+    "trace": {
+      "trigger/1": [{"path": "trigger/1", "timestamp": "2026-03-16T20:07:05.100000+00:00", "changed_variables": {
+        "trigger": {
+          "event": {
+            "data": {
+              "device_ieee": "00:17:88:01:0b:aa:bb:cc",
+              "device_id": "04c5db8c1b1ee833e4d3547b3c5603fd",
+              "unique_id": "00:17:88:01:0b:aa:bb:cc:1:0x0006",
+              "endpoint_id": 1,
+              "cluster_id": 6,
+              "command": "off_with_effect",
+              "args": {"effect_id": 0, "effect_variant": 0},
+              "params": {}
+            }
+          }
+        }
+      }}],
+      "action/1": [{"path": "action/1", "timestamp": "2026-03-16T20:07:05.110000+00:00", "changed_variables": {
+        "trigger_action": "off_with_effect_effect_id_0_effect_variant_0",
+        "trigger_delta": 5230.4,
+        "helper_debounce_delay": 0,
+        "helper_double_press_delay": 500,
+        "adjusted_double_press_delay": 500
+      }}],
+      "action/2": [{"path": "action/2", "timestamp": "2026-03-16T20:07:05.120000+00:00", "result": {
+        "params": {
+          "domain": "input_text",
+          "service": "set_value",
+          "service_data": {"entity_id": "input_text.living_room_remote_helper", "value": "{\"a\":\"off_with_effect\",\"t\":1234567890.0}"},
+          "target": {}
+        }
+      }}]
+    },
+    "context": {"id": "ctx004"}
+  },
+  "logbookEntries": []
+}
