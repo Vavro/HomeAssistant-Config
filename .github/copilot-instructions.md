@@ -18,14 +18,13 @@ This repository contains a Home Assistant configuration and automation setup.
 
 ## Config Validation
 
-Validate the configuration without restarting Home Assistant:
+**Always validate before restarting HA.** Use the supervisor CLI over SSH:
 
 ```bash
-# Inside the HA container or on the host
-hass --script check_config --config /path/to/config
-
-# Or via the Developer Tools > YAML > Check Configuration in the HA UI
+ssh root@homeassistant.local "ha core check"
 ```
+
+This runs a full config parse without restarting. Exit code 0 = valid. Any errors are printed to stdout. Only restart after a clean check.
 
 ## Key Conventions
 
@@ -135,13 +134,18 @@ After the HA instance pushes UI-driven changes to `master`:
 git pull origin master
 ```
 
-### Deploying Local Changes to HA
+### Deploying Local Changes to HA ("uptake")
 
-After merging a PR:
+After merging a PR, always follow this sequence — **never skip the check step**:
+
 ```bash
-# on HA via SSH
-ssh root@homeassistant.local "cd /config && git pull && ha core restart"
+# 1. Pull latest master
+# 2. Validate config (MUST pass before restart)
+# 3. Restart HA
+ssh root@homeassistant.local "cd /homeassistant && git pull && ha core check && ha core restart"
 ```
+
+If `ha core check` fails, **do not restart** — diagnose and fix the config error first. A failed restart can leave HA in a broken state.
 
 ## Diagnosing Automation Problems
 
