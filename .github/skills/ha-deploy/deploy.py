@@ -21,7 +21,7 @@ HA_HOST = os.environ.get("HA_HOST", "root@homeassistant.local")
 HA_REPO_DIR = os.environ.get("HA_REPO_DIR", "/homeassistant")
 RESTART_TIMEOUT = 120  # seconds to wait for HA to come back
 
-SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=3"]
+SSH_OPTS = ["-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=3"]
 
 
 def ssh(cmd: str) -> subprocess.CompletedProcess:

@@ -21,7 +21,7 @@ import re
 import shlex
 
 HA_HOST = os.environ.get("HA_HOST", "root@homeassistant.local")
-SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=3"]
+SSH_OPTS = ["-o", "ConnectTimeout=10", "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=3"]
 
 # Safelist of .storage keys allowed to be read
 ALLOWED_STORAGE = {
