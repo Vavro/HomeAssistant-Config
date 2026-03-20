@@ -1,4 +1,4 @@
-# Copilot CLI Permissions Wishlist
+﻿# Copilot CLI Permissions Wishlist
 
 Desired auto-approval configuration once the Copilot CLI adds persistent tool permissions.
 Track progress at: https://github.com/github/copilot-cli/issues/307 (Phase 4, ~Q2 2026)

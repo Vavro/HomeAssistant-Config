@@ -1,4 +1,4 @@
-blueprint:
+﻿blueprint:
   name: Controller - IKEA E2001/E2002 STYRBAR Remote control
   description: "# Controller - IKEA E2001/E2002 STYRBAR Remote control\n\nController
     automation for executing any kind of action triggered by the provided IKEA E2001/E2002

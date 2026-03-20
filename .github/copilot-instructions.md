@@ -1,4 +1,4 @@
-# Home Assistant Configuration
+﻿# Home Assistant Configuration
 
 This repository contains a Home Assistant configuration and automation setup.
 

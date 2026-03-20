@@ -1,4 +1,4 @@
-blueprint:
+﻿blueprint:
   name: Confirmable Notification
   description: >-
     A script that sends an actionable notification with a confirmation before

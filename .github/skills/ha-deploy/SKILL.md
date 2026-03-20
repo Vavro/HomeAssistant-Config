@@ -1,4 +1,4 @@
----
+﻿---
 name: ha-deploy
 description: Safely deploy latest HA config changes to the Home Assistant instance. Runs git pull → config validation → restart with online polling. Use this whenever the user says "deploy", "uptake", "apply to HA", or after merging a PR that changes configuration.yaml, automations.yaml, scripts.yaml, blueprints, or custom_components.
 ---

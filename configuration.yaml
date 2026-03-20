@@ -1,3 +1,4 @@
+﻿---
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
@@ -9,13 +10,13 @@ tts:
 # hydrawise:
 #   access_token: !secret hydrawise_access_token
 
-#binary_sensor:
+# binary_sensor:
 #  - platform: hydrawise
 
-#sensor:
+# sensor:
 #  - platform: hydrawise
 
-#switch:
+# switch:
 #  - platform: hydrawise
 
 group: !include groups.yaml
@@ -43,8 +44,8 @@ samsung_soundbar:
 
 api:
 
-#zha_toolkit is now enabled through HACS custom components
-#zha_toolkit:
+# zha_toolkit is now enabled through HACS custom components
+# zha_toolkit:
 
 # InfluxDB: connection details managed via UI (Settings → Devices & Services → InfluxDB)
 # Removed host/port/database/username/password - migrated to UI in HA 2026.3 (required before 2026.9)
@@ -53,7 +54,7 @@ influxdb:
   default_measurement: state
 
 logger:
-  default: warn #info 
+  default: warn  # info
 #  logs:
 #    homeassistant.components.zha: debug
 #    zigpy: debug

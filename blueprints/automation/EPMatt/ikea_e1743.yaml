@@ -1,4 +1,4 @@
-blueprint:
+﻿blueprint:
   name: Controller - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
   description: "# Controller - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer\n\nController
     automation for executing any kind of action triggered by the provided IKEA E1743
