@@ -67,6 +67,7 @@ hass-emulated-hue
 
 # Runtime files
 .ha_run.lock
+.ha_token
 
 # Cached integration brand icons and metadata (auto-downloaded by HA)
 .cache/
