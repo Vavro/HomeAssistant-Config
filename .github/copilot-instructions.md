@@ -18,14 +18,13 @@ This repository contains a Home Assistant configuration and automation setup.
 
 ## Config Validation
 
-Validate the configuration without restarting Home Assistant:
+**Always validate before restarting HA.** Use the supervisor CLI over SSH:
 
 ```bash
-# Inside the HA container or on the host
-hass --script check_config --config /path/to/config
-
-# Or via the Developer Tools > YAML > Check Configuration in the HA UI
+ssh root@homeassistant.local "ha core check"
 ```
+
+This runs a full config parse without restarting. Exit code 0 = valid. Any errors are printed to stdout. Only restart after a clean check.
 
 ## Key Conventions
 
@@ -135,13 +134,30 @@ After the HA instance pushes UI-driven changes to `master`:
 git pull origin master
 ```
 
-### Deploying Local Changes to HA
+### Deploying Local Changes to HA ("uptake")
 
-After merging a PR:
+After merging a PR, always follow this sequence — **never skip the check step**:
+
 ```bash
-# on HA via SSH
-ssh root@homeassistant.local "cd /config && git pull && ha core restart"
+# 1. Pull latest master
+# 2. Validate config (MUST pass before restart)
+# 3. Restart HA
+ssh root@homeassistant.local "cd /homeassistant && git pull && ha core check && ha core restart"
 ```
+
+If `ha core check` fails, **do not restart** — diagnose and fix the config error first. A failed restart can leave HA in a broken state.
+
+## Skills
+
+Use these skills instead of raw SSH or shell commands:
+
+| Task | Skill |
+|------|-------|
+| Deploy after merging a PR (pull → validate → restart) | `ha-deploy` |
+| Inspect HA status, logs, entities, config entries, Lovelace | `ha-investigate` |
+| Diagnose why an automation didn't fire | `analyze-ha-traces` |
+
+**Note on `.storage/`:** Contains ALL UI-managed HA config — dashboards, entity registry, device registry, all integration credentials, helpers, auth. Never write to `.storage/` files without explicit user confirmation.
 
 ## Diagnosing Automation Problems
 
@@ -188,7 +204,7 @@ Physical button press
   → Hook blueprint  (maps abstract action → light.turn_off / light.turn_on etc.)
 ```
 
-Controller blueprints live in `/config/blueprints/automation/EPMatt/`:
+Controller blueprints live in `/homeassistant/blueprints/automation/EPMatt/`:
 - `philips_324131092621.yaml` — Philips Hue RWL021 dimmer
 - `ikea_e2001_e2002_new.yaml` — IKEA STYRBAR (E2001/E2002)
 
