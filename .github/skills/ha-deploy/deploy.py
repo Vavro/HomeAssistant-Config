@@ -42,7 +42,7 @@ _RELOAD_MAP = [
     ("scenes/", "scene", "reload", "scenes"),
     ("blueprints/", "automation", "reload", "automations (blueprints changed)"),
     ("groups.yaml", "homeassistant", "reload_groups", "groups"),
-    ("customize.yaml", "homeassistant", "reload_custom_templates", "custom templates"),
+    ("customize.yaml", "homeassistant", "reload_core_config", "entity customizations"),
 ]
 
 
@@ -83,6 +83,10 @@ def git_pull() -> tuple[bool, list[str]]:
             fail(f"Could not switch to master:\n{r.stderr}")
             return False, []
 
+    # Capture SHA before pulling so we can diff reliably (HEAD@{1} requires reflog)
+    before = ssh(f"cd {HA_REPO_DIR} && git rev-parse HEAD")
+    before_sha = before.stdout.strip() if before.returncode == 0 else None
+
     result = ssh(f"cd {HA_REPO_DIR} && git pull origin master")
     if result.returncode != 0:
         fail(f"git pull failed:\n{result.stderr}")
@@ -96,8 +100,17 @@ def git_pull() -> tuple[bool, list[str]]:
         return True, []
 
     # Determine exactly which files changed during this pull
-    diff = ssh(f"cd {HA_REPO_DIR} && git diff HEAD@{{1}} HEAD --name-only 2>/dev/null")
-    changed = [f.strip() for f in diff.stdout.strip().splitlines() if f.strip()]
+    if before_sha:
+        diff = ssh(f"cd {HA_REPO_DIR} && git diff {before_sha} HEAD --name-only")
+        if diff.returncode == 0:
+            changed = [f.strip() for f in diff.stdout.strip().splitlines() if f.strip()]
+        else:
+            warn("Could not diff changes — assuming full restart is needed")
+            changed = ["__unknown__"]
+    else:
+        warn("Could not capture pre-pull SHA — assuming full restart is needed")
+        changed = ["__unknown__"]
+
     ok(f"Pull complete — {len(changed)} file(s) changed")
     return True, changed
 
@@ -116,9 +129,12 @@ def classify_changes(files: list[str]) -> tuple[set[tuple[str, str, str]], bool]
     for f in files:
         matched = False
         for prefix, domain, service, label in _RELOAD_MAP:
-            if f == prefix or f.startswith(prefix):
+            if prefix.endswith("/"):
+                matched = f.startswith(prefix)
+            else:
+                matched = (f == prefix)
+            if matched:
                 reload_actions.add((domain, service, label))
-                matched = True
                 break
         if not matched:
             needs_restart = True
@@ -145,7 +161,8 @@ def call_ha_service(domain: str, service: str) -> bool:
         f'HA_TOKEN=$(cat {HA_REPO_DIR}/.ha_token 2>/dev/null) && '
         f'[ -n "$HA_TOKEN" ] && '
         f'curl -s -o /dev/null -w "%{{http_code}}" '
-        f'-X POST {HA_API_URL}/api/services/{domain}/{service} '
+        f'--connect-timeout 10 --max-time 30 '
+        f'-X POST "{HA_API_URL}/api/services/{domain}/{service}" '
         f'-H "Authorization: Bearer $HA_TOKEN" '
         f'-H "Content-Type: application/json" '
         f"-d '{{}}'"

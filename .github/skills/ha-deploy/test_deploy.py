@@ -14,15 +14,23 @@ def _load_deploy():
     stub = types.ModuleType("subprocess")
     stub.run = lambda *a, **kw: (_ for _ in ()).throw(RuntimeError("SSH called in tests"))
     stub.CompletedProcess = object  # type hint only
-    sys.modules.setdefault("subprocess", stub)
 
-    spec = importlib.util.spec_from_file_location(
-        "deploy",
-        os.path.join(os.path.dirname(__file__), "deploy.py"),
-    )
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)  # type: ignore[union-attr]
-    return mod
+    # Overwrite (not setdefault) — subprocess is already imported by the time tests run
+    original = sys.modules.get("subprocess")
+    sys.modules["subprocess"] = stub
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "deploy",
+            os.path.join(os.path.dirname(__file__), "deploy.py"),
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)  # type: ignore[union-attr]
+        return mod
+    finally:
+        if original is None:
+            sys.modules.pop("subprocess", None)
+        else:
+            sys.modules["subprocess"] = original
 
 
 deploy = _load_deploy()
@@ -72,7 +80,7 @@ class TestClassifyChanges:
 
     def test_customize_yaml(self):
         actions, needs_restart = classify_changes(["customize.yaml"])
-        assert ("homeassistant", "reload_custom_templates", "custom templates") in actions
+        assert ("homeassistant", "reload_core_config", "entity customizations") in actions
         assert needs_restart is False
 
     def test_configuration_yaml_forces_restart(self):
@@ -112,4 +120,15 @@ class TestClassifyChanges:
     def test_dotfile_in_repo_forces_restart(self):
         """Files like .gitignore that have no reload mapping require restart."""
         actions, needs_restart = classify_changes([".gitignore"])
+        assert needs_restart is True
+
+    def test_automations_yaml_bak_forces_restart(self):
+        """automations.yaml.bak must NOT match the automations.yaml exact entry."""
+        actions, needs_restart = classify_changes(["automations.yaml.bak"])
+        assert needs_restart is True
+        assert not any(d == "automation" for d, *_ in actions)
+
+    def test_unknown_sentinel_forces_restart(self):
+        """The __unknown__ sentinel (used when git diff fails) must trigger restart."""
+        actions, needs_restart = classify_changes(["__unknown__"])
         assert needs_restart is True

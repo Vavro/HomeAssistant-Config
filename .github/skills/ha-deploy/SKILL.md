@@ -48,8 +48,9 @@ Smart reload requires a one-time token setup (see below). Without it, falls back
 1. In HA UI: **Profile → Security → Long-Lived Access Tokens → Create Token**
 2. Copy the token, then SSH to HA and run:
    ```bash
-   echo "YOUR_TOKEN_HERE" > /homeassistant/.ha_token
-   chmod 600 /homeassistant/.ha_token
+   # Token lives in the same directory as the git repo (HA_REPO_DIR, default: /homeassistant)
+   echo "YOUR_TOKEN_HERE" > "${HA_REPO_DIR:-/homeassistant}/.ha_token"
+   chmod 600 "${HA_REPO_DIR:-/homeassistant}/.ha_token"
    ```
 3. The token file is gitignored and stays only on the HA instance.
 
