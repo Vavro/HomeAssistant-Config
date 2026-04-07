@@ -21,8 +21,17 @@ jobs:
       - name: Check out configuration from GitHub
         uses: actions/checkout@v4
 
+      - name: Stub custom integrations for CI
+        run: |
+          # samsung_soundbar is installed via HACS on the live instance;
+          # provide a minimal manifest so check_config doesn't error.
+          mkdir -p custom_components/samsung_soundbar
+          echo '{"domain":"samsung_soundbar","name":"Samsung Soundbar (stub)","version":"0.0.0","integration_type":"device"}' \
+            > custom_components/samsung_soundbar/manifest.json
+          touch custom_components/samsung_soundbar/__init__.py
+
       - name: Run Home Assistant Configuration Check
-        uses: frenck/action-home-assistant@v1.4
+        uses: frenck/action-home-assistant@v1.4.1
         with:
           path: "."
           secrets: ./secrets.fake.yaml
