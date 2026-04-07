@@ -30,12 +30,19 @@ jobs:
             > custom_components/samsung_soundbar/manifest.json
           touch custom_components/samsung_soundbar/__init__.py
 
+      - name: Normalize UI-managed automation syntax for check_config
+        run: |
+          # HA UI writes triggers/conditions/actions (plural) which
+          # check_config doesn't fully support yet. Rewrite to the
+          # singular form so validation can catch real errors.
+          sed -i \
+            -e 's/^  triggers:/  trigger:/' \
+            -e 's/^  conditions:/  condition:/' \
+            -e 's/^  actions:/  action:/' \
+            automations.yaml
+
       - name: Run Home Assistant Configuration Check
         uses: frenck/action-home-assistant@v1.4.1
-        # automations.yaml is UI-managed and may use newer syntax
-        # (triggers/conditions/actions) that check_config doesn't
-        # fully support yet — treat failures as warnings, not blockers.
-        continue-on-error: true
         with:
           path: "."
           secrets: ./secrets.fake.yaml
