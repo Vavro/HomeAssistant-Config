@@ -1,0 +1,21 @@
+---
+name: Linting
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  yamllint:
+    name: yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out configuration from GitHub
+        uses: actions/checkout@v4
+
+      - name: Run yamllint
+        uses: frenck/action-yamllint@v1.5

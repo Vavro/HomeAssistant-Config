@@ -50,6 +50,8 @@ scans
 
 # Development files
 custom_components
+__pycache__
+*.pyc
 
 #zigbee-db should not be stored
 zigbee.db*
