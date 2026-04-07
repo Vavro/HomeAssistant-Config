@@ -158,11 +158,11 @@ def check_config() -> bool:
 def call_ha_service(domain: str, service: str) -> bool:
     """Call a HA service via the REST API over SSH using the stored token."""
     cmd = (
-        f'HA_TOKEN=$(cat {HA_REPO_DIR}/.ha_token 2>/dev/null) && '
+        f'HA_TOKEN=$(cat "{HA_REPO_DIR}/.ha_token" 2>/dev/null) && '
         f'[ -n "$HA_TOKEN" ] && '
         f'curl -s -o /dev/null -w "%{{http_code}}" '
         f'--connect-timeout 10 --max-time 30 '
-        f'-X POST "{HA_API_URL}/api/services/{domain}/{service}" '
+        f"-X POST '{HA_API_URL}/api/services/{domain}/{service}' "
         f'-H "Authorization: Bearer $HA_TOKEN" '
         f'-H "Content-Type: application/json" '
         f"-d '{{}}'"

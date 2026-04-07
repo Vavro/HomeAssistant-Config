@@ -38,7 +38,7 @@ calls the HA REST API to reload only what changed. No restart, no downtime.
 | `scenes.yaml`, `scenes/` | `scene.reload` | None |
 | `blueprints/` | `automation.reload` | None |
 | `groups.yaml` | `homeassistant.reload_groups` | None |
-| `customize.yaml` | `homeassistant.reload_custom_templates` | None |
+| `customize.yaml` | `homeassistant.reload_core_config` | None |
 | `configuration.yaml` or anything else | Full restart | ~60s |
 
 Smart reload requires a one-time token setup (see below). Without it, falls back to full restart.
@@ -57,7 +57,7 @@ Smart reload requires a one-time token setup (see below). Without it, falls back
 ## What it does (full flow)
 
 1. **`git pull origin master`** — pulls latest master onto the HA instance
-2. **Detects changed files** — `git diff HEAD@{1} HEAD --name-only`
+2. **Detects changed files** — diffs the captured pre-pull SHA against `HEAD` (`git diff <pre_pull_sha> HEAD --name-only`)
 3. **`ha core check`** — validates the full config; aborts if any error
 4. **Smart reload** — calls targeted HA reload services (if token available and only reloadable files changed)
 5. **Full restart** — only if `configuration.yaml` or other restart-required files changed

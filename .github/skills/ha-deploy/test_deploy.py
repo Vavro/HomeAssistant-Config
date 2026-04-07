@@ -3,7 +3,6 @@ import importlib
 import sys
 import os
 import types
-import pytest
 
 # ---------------------------------------------------------------------------
 # Bootstrap: import deploy.py without triggering SSH or argparse side-effects
