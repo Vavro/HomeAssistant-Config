@@ -1,4 +1,4 @@
-﻿---
+---
 name: ha-investigate
 description: Read-only inspection of the live Home Assistant instance over SSH. Use this for checking HA status, logs, entities, config entries, Lovelace dashboards, and storage files. All operations are strictly read-only — no state is modified. Use this instead of raw SSH commands for any HA inspection task.
 ---

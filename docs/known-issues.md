@@ -1,4 +1,4 @@
-﻿# Known Issues & Fixes Applied
+# Known Issues & Fixes Applied
 
 A running log of breaking changes encountered during HA/integration updates and the fixes applied. Keep this file up to date when a PR fixes a compatibility issue — it serves as context for diagnosing future regressions.
 

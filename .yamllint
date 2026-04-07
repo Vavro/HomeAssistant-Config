@@ -1,4 +1,4 @@
-﻿---
+---
 # Based on frenck's yamllint config, adapted for this repo.
 # Third-party blueprints and auto-generated files are excluded.
 ignore: |

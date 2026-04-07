@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 ha-deploy: Pull latest master to HA, validate config, restart if valid.
 

@@ -1,4 +1,4 @@
-﻿# Home Assistant Configuration
+# Home Assistant Configuration
 
 Personal [Home Assistant](https://www.home-assistant.io/) setup running on **HA OS**, managing lights, shutters, garden, and more across a family home — fully automated with Zigbee remotes and smart scenes.
 

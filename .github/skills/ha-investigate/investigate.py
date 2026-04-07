@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 ha-investigate: Safe read-only inspection of the live HA instance over SSH.
 

@@ -1,4 +1,4 @@
-﻿# Blueprint metadata
+# Blueprint metadata
 blueprint:
   homeassistant:
     min_version: "2023.6.0"

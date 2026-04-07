@@ -1,4 +1,4 @@
-﻿---
+---
 name: analyze-ha-traces
 description: Analyze Home Assistant automation trace JSON files to diagnose why automations are not working. Use this when the user downloads trace files from the HA UI and wants to understand what happened, why a switch didn't trigger a light, or why an automation failed.
 ---

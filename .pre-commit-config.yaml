@@ -1,4 +1,4 @@
-﻿---
+---
 # Pre-commit hooks — run before every local commit.
 # Install: pip install pre-commit && pre-commit install
 exclude: ^(custom_components|www/community)/
