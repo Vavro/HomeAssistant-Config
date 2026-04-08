@@ -737,7 +737,8 @@
   mode: single
 - id: '1744089600000'
   alias: Stop morning radio after 2 hours
-  description: Auto-stop morning radio to prevent Music Assistant AirPlay from running
+  description: >-
+    Auto-stop morning radio to prevent Music Assistant AirPlay from running
     indefinitely (see issue #25). Triggers when radio starts playing during weekday
     morning window, waits 2 hours, then stops if still playing radio.
   triggers:
