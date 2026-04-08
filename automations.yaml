@@ -737,35 +737,56 @@
   mode: single
 - id: '1744089600000'
   alias: Stop morning radio after 2 hours
-  description: Auto-stop radio to prevent Music Assistant AirPlay from running indefinitely
-    (see issue #25)
+  description: Auto-stop morning radio to prevent Music Assistant AirPlay from running
+    indefinitely (see issue #25). Triggers when radio starts playing during weekday
+    morning window, waits 2 hours, then stops if still playing radio.
   triggers:
   - trigger: state
     entity_id:
     - media_player.living_room_soundbar
     - media_player.living_room_speaker
     to: playing
-    for:
-      hours: 2
-      minutes: 0
-      seconds: 0
   conditions:
   - condition: time
-    after: '07:55:00'
-    before: '10:00:00'
+    after: '05:55:00'
+    before: '06:45:00'
     weekday:
     - mon
     - tue
     - wed
     - thu
     - fri
-  actions:
-  - action: media_player.media_stop
-    target:
+  - condition: or
+    conditions:
+    - condition: state
       entity_id: media_player.living_room_soundbar
-  - action: media_player.media_stop
-    target:
+      attribute: media_title
+      state: Evropa 2
+    - condition: state
       entity_id: media_player.living_room_speaker
+      attribute: media_title
+      state: Evropa 2
+  actions:
+  - delay:
+      hours: 2
+      minutes: 0
+      seconds: 0
+  - if:
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: media_player.living_room_soundbar
+        state: playing
+      - condition: state
+        entity_id: media_player.living_room_speaker
+        state: playing
+    then:
+    - action: media_player.media_stop
+      target:
+        entity_id: media_player.living_room_soundbar
+    - action: media_player.media_stop
+      target:
+        entity_id: media_player.living_room_speaker
   mode: single
 - id: '1734246047036'
   alias: Car integration unavailable
