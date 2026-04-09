@@ -740,7 +740,8 @@
   description: >-
     Auto-stop morning radio to prevent Music Assistant AirPlay from running
     indefinitely (see issue #25). Triggers when the morning radio automation
-    fires, waits 2 hours, then stops both players.
+    fires, waits 2 hours, then stops players only if still playing radio
+    (won't mute the TV).
   triggers:
   - trigger: state
     entity_id: automation.morning_radio_when_lights_turn_on
@@ -750,11 +751,24 @@
       hours: 2
       minutes: 0
       seconds: 0
-  - action: media_player.media_stop
-    target:
-      entity_id:
-      - media_player.living_room_soundbar
-      - media_player.living_room_speaker
+  - if:
+    - condition: template
+      value_template: >-
+        {{ state_attr('media_player.living_room_soundbar',
+        'media_title') | default('', true) == 'Evropa 2' }}
+    then:
+    - action: media_player.media_stop
+      target:
+        entity_id: media_player.living_room_soundbar
+  - if:
+    - condition: template
+      value_template: >-
+        {{ state_attr('media_player.living_room_speaker',
+        'media_title') | default('', true) == 'Evropa 2' }}
+    then:
+    - action: media_player.media_stop
+      target:
+        entity_id: media_player.living_room_speaker
   mode: restart
 - id: '1734246047036'
   alias: Car integration unavailable
