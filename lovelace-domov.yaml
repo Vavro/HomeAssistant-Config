@@ -341,6 +341,103 @@ views:
         entity: image.530d_xdrive_vehicle_image
         show_name: false
         show_state: false
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Insurance Year Mileage (Aug 16 → Aug 16)
+          show_states: true
+        update_interval: 6h
+        graph_span: 365d
+        span:
+          start: day
+          offset: "-237d"
+        series:
+          - entity: sensor.530d_xdrive_vehicle_mileage
+            name: Km driven (Year 2)
+            color: "#2196f3"
+            type: line
+            stroke_width: 2
+            data_generator: |
+              // Insurance Year 2: Aug 16, 2025 → Aug 16, 2026
+              const yearStart = new Date(2025, 7, 16);
+              const yearStartOdo = 52845;
+              // Known data points (from insurance reports + HA)
+              const points = [
+                [yearStart.getTime(), 0],
+                [new Date(2025, 8, 3).getTime(), 54135 - yearStartOdo],
+              ];
+              // Current from live sensor
+              const current = parseFloat(entity.state);
+              if (!isNaN(current)) {
+                points.push([Date.now(), current - yearStartOdo]);
+              }
+              return points;
+          - entity: sensor.530d_xdrive_vehicle_mileage
+            name: Projected to Aug 16
+            color: "#ff9800"
+            type: line
+            stroke_width: 2
+            stroke_dash: 5
+            data_generator: |
+              const yearStart = new Date(2025, 7, 16);
+              const yearEnd = new Date(2026, 7, 16);
+              const yearStartOdo = 52845;
+              const current = parseFloat(entity.state);
+              if (isNaN(current)) return [];
+              const now = Date.now();
+              const driven = current - yearStartOdo;
+              const daysSinceStart = (now - yearStart.getTime()) / 86400000;
+              const dailyRate = driven / daysSinceStart;
+              const daysToEnd = (yearEnd.getTime() - now) / 86400000;
+              const projected = driven + dailyRate * daysToEnd;
+              return [
+                [now, driven],
+                [yearEnd.getTime(), projected],
+              ];
+          - entity: sensor.530d_xdrive_vehicle_mileage
+            name: Year 1 pace (ref)
+            color: "#9e9e9e"
+            type: line
+            stroke_width: 1
+            stroke_dash: 3
+            data_generator: |
+              // Year 1: Aug 16 2024→Aug 16 2025, drove ~27,091 km
+              const yearStart = new Date(2025, 7, 16);
+              const year1daily = 27091 / 365;
+              const points = [];
+              for (let d = 0; d <= 365; d += 30) {
+                points.push([yearStart.getTime() + d * 86400000, year1daily * d]);
+              }
+              points.push([yearStart.getTime() + 365 * 86400000, 27091]);
+              return points;
+        apex_config:
+          chart:
+            height: 350
+          stroke:
+            curve: smooth
+          yaxis:
+            - title:
+                text: km driven
+              min: 0
+          xaxis:
+            type: datetime
+          annotations:
+            yaxis:
+              - y: 25000
+                borderColor: "#f44336"
+                label:
+                  text: "25,000 km bracket"
+                  style:
+                    color: "#fff"
+                    background: "#f44336"
+              - y: 20000
+                borderColor: "#4caf50"
+                borderWidth: 1
+                label:
+                  text: "20,000 km bracket"
+                  style:
+                    color: "#fff"
+                    background: "#4caf50"
       - type: entities
         title: Range & Mileage
         entities:
@@ -348,6 +445,30 @@ views:
           - entity: sensor.530d_xdrive_range_tank_level
           - entity: sensor.530d_xdrive_range_tank_level_2
           - entity: sensor.530d_xdrive_range_total_range_last_sent
+          - entity: sensor.530d_xdrive_remaining_fuel
+          - entity: sensor.530d_xdrive_remaining_fuel_percent
+      - type: entities
+        title: Vehicle Health
+        entities:
+          - entity: sensor.530d_xdrive_battery_voltage_12v
+            name: 12V Battery
+          - entity: sensor.530d_xdrive_vehicle_coolant_temperature
+            name: Coolant Temp
+          - entity: binary_sensor.530d_xdrive_check_control_messages
+            name: Check Control
+          - entity: binary_sensor.530d_xdrive_condition_based_services
+            name: CBS Status
+      - type: entities
+        title: Service Schedule
+        entities:
+          - entity: sensor.530d_xdrive_service_distance_to_next_service
+            name: Distance to Service
+          - entity: sensor.530d_xdrive_service_inspection_time_threshold
+            name: Inspection Time
+          - entity: sensor.530d_xdrive_service_next_service_distance_threshold
+            name: Next Service Distance
+          - entity: sensor.530d_xdrive_service_cbs_report_count
+            name: CBS Report Count
       - type: entities
         title: Doors & Openings
         entities:
@@ -368,13 +489,23 @@ views:
           - entity: sensor.530d_xdrive_window_state_rear_passenger
           - entity: sensor.530d_xdrive_sunroof_overall_state
           - entity: sensor.530d_xdrive_sunroof_state
-      - type: entities
+      - type: custom:flex-table-card
         title: Tyre Pressures
         entities:
-          - entity: sensor.530d_xdrive_tire_pressure_front_left
-          - entity: sensor.530d_xdrive_tire_pressure_front_right
-          - entity: sensor.530d_xdrive_tire_pressure_rear_left
-          - entity: sensor.530d_xdrive_tire_pressure_rear_right
+          include: sensor.530d_xdrive_tire_pressure_*
+          exclude: sensor.530d_xdrive_tire_pressure_target_*
+        columns:
+          - name: Corner
+            data: friendly_name
+            modify: x.replace(/.*tire pressure /i, '').replace(/_/g, ' ')
+          - name: Actual
+            data: state
+            suffix: " bar"
+          - name: Target
+            data: entity_id
+            modify: |-
+              const id = x.replace('tire_pressure', 'tire_pressure_target');
+              hass.states[id] ? hass.states[id].state + ' bar' : '?'
       - type: map
         entities:
           - entity: device_tracker.530d_xdrive_location
