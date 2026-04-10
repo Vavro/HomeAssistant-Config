@@ -69,6 +69,10 @@ hass-emulated-hue
 .ha_run.lock
 .ha_token
 
+# Service account tokens for Copilot / tooling (read-only)
+.influxdb_reader_token
+.grafana_token
+
 # Cached integration brand icons and metadata (auto-downloaded by HA)
 .cache/
 
