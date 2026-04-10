@@ -8,7 +8,7 @@ views:
       - entity: person.petr_vavro
       - entity: person.hanka
       - entity: sensor.kitchen_light_remote_battery
-      - entity: sensor.living_room_dining_light_remote_battery
+      - entity: sensor.living_room_dining_light_controller_battery
       - entity: sensor.living_room_kaja_light_controller_power
       - type: entity
         show_name: false
