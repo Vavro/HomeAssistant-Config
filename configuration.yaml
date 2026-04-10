@@ -35,15 +35,6 @@ zha:
       sonoff_provider: true
       thirdreality_provider: false
 
-# samsung_soundbar: disabled temporarily — broken on HA 2026.3 (SUPPORT_PAUSE removed)
-# TODO: fix media_player.py or wait for upstream update
-# samsung_soundbar:
-#   devices:
-#     - name: Living room soundbar
-#       api_key: !secret living_room_soundbar_api_key
-#       device_id: !secret living_room_soundbar_device_id
-#       max_volume: 100
-
 api:
 
 # zha_toolkit is now enabled through HACS custom components
