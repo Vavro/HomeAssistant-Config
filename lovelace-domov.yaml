@@ -197,7 +197,6 @@ views:
       - type: entities
         entities:
           - switch.bathroom_hot_water_circulation_2
-          - switch.bathroom_hot_water_circulation_2
       - type: entities
         entities:
           - cover.schodiste
