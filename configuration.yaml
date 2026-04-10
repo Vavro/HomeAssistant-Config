@@ -25,7 +25,7 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 
 # Lovelace dashboards in YAML mode (version-controlled)
-# Default dashboard reads from ui-lovelace.yaml
+# YAML dashboards are defined below; set your preferred one as default via HA UI
 # Reload: Developer Tools → YAML → Dashboards
 # Note: resource_mode: yaml required since HA 2026.2 (mode: yaml deprecated, removed in 2026.8)
 lovelace:

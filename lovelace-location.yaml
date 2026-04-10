@@ -1,11 +1,12 @@
+---
 views:
-- title: Home
-  cards:
-  - type: map
-    entities:
-    - entity: person.petr_vavro
-    - entity: device_tracker.530d_xdrive
-    - entity: device_tracker.530d_xdrive_location
-    theme_mode: auto
-    hours_to_show: 24
-  type: panel
+  - title: Home
+    cards:
+      - type: map
+        entities:
+          - entity: person.petr_vavro
+          - entity: device_tracker.530d_xdrive
+          - entity: device_tracker.530d_xdrive_location
+        theme_mode: auto
+        hours_to_show: 24
+    type: panel
