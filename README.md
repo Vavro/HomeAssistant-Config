@@ -92,19 +92,26 @@ After editing any blueprint: **Developer Tools → YAML → Reload Automations**
 
 ```
 /
-├── configuration.yaml       # Main HA config (ZHA, InfluxDB, Samsung Soundbar, etc.)
+├── configuration.yaml       # Main HA config (ZHA, InfluxDB, Lovelace dashboards, etc.)
+├── lovelace-domov.yaml      # Domov dashboard (YAML mode, primary)
+├── ui-lovelace.yaml         # Overview dashboard (YAML mode)
+├── lovelace-location.yaml   # Location dashboard (YAML mode)
 ├── automations.yaml         # All automations (UI-managed + manual)
 ├── scripts.yaml             # Reusable scripts
 ├── scenes.yaml              # Scenes
 ├── groups.yaml              # Entity groups
 ├── customize.yaml           # Entity customizations
+├── secrets.fake.yaml        # Dummy secrets for CI config validation
+├── .yamllint                # yamllint style config
+├── .pre-commit-config.yaml  # Pre-commit hooks (yamllint, prettier, etc.)
 ├── blueprints/              # Automation blueprints
 │   └── automation/EPMatt/   # Awesome HA Blueprints (controller + hook)
 ├── glances/                 # Glances monitoring config
 ├── www/                     # Lovelace frontend resources
 └── .github/
     ├── copilot-instructions.md          # Copilot workspace context
-    └── skills/analyze-ha-traces/       # Trace analysis skill + tests
+    ├── workflows/home-assistant.yml     # CI: yamllint + HA config check
+    └── skills/                          # Copilot skills (deploy, investigate, traces)
 ```
 
 Secrets are stored in `secrets.yaml` (gitignored) and referenced with `!secret` throughout.
@@ -113,9 +120,60 @@ Secrets are stored in `secrets.yaml` (gitignored) and referenced with `!secret` 
 
 ## Development Workflow
 
-- **Local machine**: create a branch, open a PR — Copilot review runs automatically
-- **HA instance**: pushes directly to `master` (SSH deploy key in bypass list)
+- **Local machine / Copilot**: feature branch → PR → automated review
+- **HA instance**: pushes UI-edited automations directly to `master` (SSH deploy key)
 - Branch protection enforces PRs for all other contributors
+- **Git worktrees** preferred for feature branches: `git worktree add ../ha-feature feat/my-feature master`
+
+### Local Development Setup
+
+**Prerequisites:** Python 3, pip, git, Node.js (for prettier)
+
+```bash
+# Install pre-commit (runs yamllint, prettier, check-yaml, etc. before every commit)
+pip install pre-commit
+pre-commit install
+
+# Run all hooks manually on changed files
+pre-commit run --files configuration.yaml lovelace-domov.yaml
+
+# Run yamllint standalone
+pip install yamllint
+yamllint -c .yamllint .
+```
+
+Pre-commit hooks (`.pre-commit-config.yaml`):
+
+| Hook | Purpose |
+|------|---------|
+| `check-yaml` | Validates YAML syntax |
+| `yamllint` | Enforces YAML style (`.yamllint` config: 2-space indent, `---` required, unix newlines) |
+| `prettier` | Formats Markdown, JSON |
+| `check-json` | Validates JSON syntax |
+| `detect-private-key` | Catches accidentally committed keys |
+| `trailing-whitespace` | Removes trailing spaces |
+| `end-of-file-fixer` | Ensures newline at end of file |
+
+### CI Pipeline (GitHub Actions)
+
+Every push and PR triggers `.github/workflows/home-assistant.yml`:
+
+| Check | Status | What it does |
+|-------|--------|-------------|
+| **yamllint** | Required | Lints all YAML files against `.yamllint` |
+| **HA stable** | Required | Runs `check_config` against pinned HA release using `secrets.fake.yaml` |
+| **HA beta** | Informational | Same check against HA beta — warns about upcoming breaking changes |
+| **Copilot PR review** | Auto | Reviews code changes on PRs |
+
+`secrets.fake.yaml` provides dummy values so CI can validate `!secret` references without real credentials.
+
+### Copilot Skills
+
+| Skill | Purpose | Usage |
+|-------|---------|-------|
+| **ha-deploy** | Deploy config to HA (git pull → validate → smart reload/restart) | After merging a PR |
+| **ha-investigate** | Read-only inspection of HA (logs, entities, storage, status) | Diagnosing issues |
+| **analyze-ha-traces** | Analyze automation trace JSON files | When automations misbehave |
 
 ### Diagnosing broken automations
 
