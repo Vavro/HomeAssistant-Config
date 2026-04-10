@@ -52,6 +52,7 @@ lovelace:
       title: Location
       icon: mdi:map-marker
       show_in_sidebar: true
+      require_admin: true
 
 zha:
   zigpy_config:
