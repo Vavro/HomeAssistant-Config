@@ -5,7 +5,7 @@ views:
     icon: mdi:sofa
     badges:
       - type: entity
-        entity: sensor.living_room_dining_light_remote_battery
+        entity: sensor.living_room_dining_light_controller_battery
       - type: entity
         entity: sensor.living_room_main_light_controller_battery
       - type: entity
@@ -58,7 +58,7 @@ views:
             entity: media_player.living_room_soundbar
       - type: entities
         entities:
-          - entity: sensor.living_room_dining_light_remote_battery
+          - entity: sensor.living_room_dining_light_controller_battery
           - entity: sensor.living_room_kaja_light_controller_power
           - entity: sensor.living_room_shutter_controller_battery
           - entity: sensor.living_room_temperature_sensor_cf5ca3fe_power
@@ -173,7 +173,7 @@ views:
   - icon: mdi:stairs
     badges:
       - type: entity
-        entity: alarm_control_panel.part1
+        entity: switch.eldes_alarm_pre_release
       - type: entity
         entity: person.petr_vavro
       - type: entity
@@ -197,7 +197,6 @@ views:
       - type: entities
         entities:
           - switch.bathroom_hot_water_circulation_2
-          - switch.bathroom_hot_water_circulation
       - type: entities
         entities:
           - cover.schodiste
@@ -314,7 +313,7 @@ views:
           - sensor.zahrada_sonoff_4ch_pro_wifi_connect_count
       - type: entities
         entities:
-          - entity: binary_sensor.hunter_hc6_status
+          - entity: binary_sensor.hunter_hc6_connectivity
           - entity: binary_sensor.kapka_vlevo_watering
           - entity: binary_sensor.kapka_vpravo_watering
           - entity: binary_sensor.zahrada_vpedu_watering
@@ -416,24 +415,24 @@ views:
         entities:
           - entity: scene.office_video_konference_bright_sunlight
           - entity: scene.office_work_hours
-          - entity: light.hall_light
-          - entity: light.hue_color_lamp_1
+          - entity: light.entry_hall_lights
+          - entity: light.signify_netherlands_b_v_lca001_huelight
           - entity: cover.kancelar
-          - entity: light.on_off_plug_1
+          - entity: switch.living_room_smart_socket_on_off
       - type: entities
         entities:
-          - entity: light.dining_light_big
-          - entity: light.dining_spotlight_center
-          - entity: light.dining_spotlight_left
-          - entity: light.dining_spotlight_right
-          - entity: light.kitchen_light
+          - entity: light.living_room_dining_light_big_light
+          - entity: light.living_room_dining_spotlight_center_light
+          - entity: light.living_room_dining_spotlight_left_light
+          - entity: light.living_room_dining_spotlight_right_light
+          - entity: light.kitchen_light_light
           - entity: light.kitchen_counter_top_light
-          - entity: light.living_room_stand_light
+          - entity: light.living_room_stand_light_light
         title: Světlo
       - type: entities
         entities:
-          - switch.bathroom_hot_water_circulation
-          - switch.tasmota_toilet_light
+          - switch.bathroom_hot_water_circulation_2
+          - light.tasmota_toilet_light
         title: Vypínač
       - type: picture-elements
         elements:
@@ -447,7 +446,7 @@ views:
         entities:
           - entity: sensor.prusamini
           - entity: sensor.prusamini_filename
-          - entity: camera.prusamini_job_preview
+          - entity: camera.prusamini_preview
           - entity: sensor.prusamini_print_finish
           - entity: sensor.prusamini_print_start
           - entity: sensor.prusamini_progress
