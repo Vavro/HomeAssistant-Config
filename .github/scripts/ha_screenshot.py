@@ -39,6 +39,7 @@ def load_env():
 
 def login_and_save_state(ha_url, username, password, playwright):
     """Log in via the HA UI and save storageState for reuse."""
+    TMP_DIR.mkdir(exist_ok=True)
     browser = playwright.chromium.launch(headless=True)
     context = browser.new_context(color_scheme="dark")
     page = context.new_page()
@@ -64,7 +65,6 @@ def login_and_save_state(ha_url, username, password, playwright):
         sys.exit(1)
 
     # Save the auth state
-    TMP_DIR.mkdir(exist_ok=True)
     context.storage_state(path=str(STATE_FILE))
     print(f"Auth state saved to {STATE_FILE.name}")
 
