@@ -157,6 +157,8 @@ Output: `.tmp/screenshot-yaml-domov-7.png` (gitignored via `.tmp/`)
 
 **Note:** HA long-lived API tokens do NOT work for frontend auth — the frontend requires OAuth tokens from the login flow. The script must use username/password login.
 
+**Security:** Never read `.env` or credential files into session output (e.g., `Get-Content .env`). When renaming variables, use in-place replacement without displaying contents. The variable names are already known from the script source code.
+
 ### Sections View Layout
 
 The car dashboard (view 7 in `lovelace-domov.yaml`) uses the `sections` view type for explicit grid control:
