@@ -580,6 +580,7 @@ views:
                   // Rate from Jan 7 2026 (62785 km) to now
                   const recentDriven = current - 62785;
                   const recentDays = (now - new Date(2026, 0, 7).getTime()) / 86400000;
+                  if (recentDays <= 0) return [];
                   const dailyRate = recentDriven / recentDays;
                   const daysToEnd = (yearEnd.getTime() - now) / 86400000;
                   const projected = driven + dailyRate * daysToEnd;
@@ -594,9 +595,9 @@ views:
                 stroke_width: 1
                 stroke_dash: 3
                 data_generator: |
-                  // Year 1 REAL data from InfluxDB (shifted +1y to overlay)
-                  // Odometer minus Year 1 start (27,044 km)
-                  const y2start = 1755302400000; // Aug 16, 2025
+                  // Year 1 actual data from InfluxDB, shifted +1y to overlay on Year 2 timeline
+                  // Values are km driven since Year 1 start (odo 27,044 on Aug 16, 2024)
+                  const y2start = 1755302400000; // Year 2 start: Aug 16, 2025
                   return [
                     [y2start, 0],
                     [1757808000000, 6349], [1760400000000, 7994],
