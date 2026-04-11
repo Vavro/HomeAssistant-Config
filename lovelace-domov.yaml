@@ -336,203 +336,330 @@ views:
     icon: mdi:tree
   - icon: mdi:car
     path: ""
-    cards:
-      - type: picture-entity
-        entity: image.530d_xdrive_vehicle_image
-        show_name: false
-        show_state: false
-      - type: custom:apexcharts-card
-        header:
-          show: true
-          title: Insurance Year Mileage (Aug 16 → Aug 16)
-          show_states: true
-        update_interval: 6h
-        graph_span: 365d
-        span:
-          start: day
-          offset: "-237d"
-        series:
-          - entity: sensor.530d_xdrive_vehicle_mileage
-            name: Km driven (Year 2)
-            color: "#2196f3"
-            type: line
-            stroke_width: 2
-            data_generator: |
-              // Weekly mileage from InfluxDB rp_10m (both old + new BMW integrations)
-              const yearStartOdo = 52845; // Aug 16, 2025
-              const history = [
-                [1755302400000, 0],
-                [1755734400000, 1746], [1756339200000, 1941],
-                [1756944000000, 2070], [1757548800000, 2264],
-                [1758153600000, 2410], [1758758400000, 2811],
-                [1763596800000, 4730], [1764201600000, 5175],
-                [1764806400000, 5345], [1765411200000, 5936],
-                [1766016000000, 6170], [1766620800000, 7234],
-                [1767225600000, 7946], [1767830400000, 8216],
-                [1768435200000, 8461], [1769040000000, 9254],
-                [1769644800000, 9932], [1770249600000, 9940],
-                [1773273600000, 12039], [1773878400000, 12237],
-                [1774483200000, 12419], [1775088000000, 12549],
-                [1775692800000, 12600],
-              ];
-              const current = parseFloat(entity.state);
-              if (!isNaN(current)) {
-                history.push([Date.now(), current - yearStartOdo]);
-              }
-              return history;
-          - entity: sensor.530d_xdrive_vehicle_mileage
-            name: Projected to Aug 16
-            color: "#ff9800"
-            type: line
-            stroke_width: 2
-            stroke_dash: 5
-            data_generator: |
-              const yearEnd = new Date(2026, 7, 16);
-              const yearStartOdo = 52845;
-              const current = parseFloat(entity.state);
-              if (isNaN(current)) return [];
-              const now = Date.now();
-              const driven = current - yearStartOdo;
-              // Rate from Jan 7 2026 (62785 km) to now
-              const recentDriven = current - 62785;
-              const recentDays = (now - new Date(2026, 0, 7).getTime()) / 86400000;
-              const dailyRate = recentDriven / recentDays;
-              const daysToEnd = (yearEnd.getTime() - now) / 86400000;
-              const projected = driven + dailyRate * daysToEnd;
-              return [
-                [now, driven],
-                [yearEnd.getTime(), projected],
-              ];
-          - entity: sensor.530d_xdrive_vehicle_mileage
-            name: Year 1 actual pace
-            color: "#9e9e9e"
-            type: line
-            stroke_width: 1
-            stroke_dash: 3
-            data_generator: |
-              // Year 1 REAL data from InfluxDB (shifted +1y to overlay)
-              // Odometer minus Year 1 start (27,044 km)
-              const y2start = 1755302400000; // Aug 16, 2025
-              return [
-                [y2start, 0],
-                [1757808000000, 6349], [1760400000000, 7994],
-                [1762992000000, 8825], [1765584000000, 11442],
-                [1768176000000, 13778], [1770768000000, 16500],
-                [1773360000000, 17630], [1775952000000, 19398],
-                [1778544000000, 21561], [1781136000000, 23160],
-                [1783728000000, 25842], [1786320000000, 27869],
-                [1788912000000, 28612],
-              ];
-        apex_config:
-          chart:
-            height: 350
-          stroke:
-            curve: smooth
-          yaxis:
-            - title:
-                text: km driven
-              min: 0
-              labels:
-                formatter: |
-                  EVAL:function(val) { return Math.round(val).toLocaleString(); }
-          xaxis:
-            type: datetime
-          annotations:
-            yaxis:
-              - y: 25000
-                borderColor: "#f44336"
-                label:
-                  text: "25,000 km bracket"
-                  style:
-                    color: "#fff"
-                    background: "#f44336"
-              - y: 20000
-                borderColor: "#4caf50"
-                borderWidth: 1
-                label:
-                  text: "20,000 km bracket"
-                  style:
-                    color: "#fff"
-                    background: "#4caf50"
-      - type: entities
-        title: Range & Mileage
-        entities:
-          - entity: sensor.530d_xdrive_vehicle_mileage
-          - entity: sensor.530d_xdrive_range_tank_level
-          - entity: sensor.530d_xdrive_range_tank_level_2
-          - entity: sensor.530d_xdrive_range_total_range_last_sent
-          - entity: sensor.530d_xdrive_remaining_fuel
-          - entity: sensor.530d_xdrive_remaining_fuel_percent
-      - type: entities
-        title: Vehicle Health
-        entities:
-          - entity: sensor.530d_xdrive_battery_voltage_12v
-            name: 12V Battery
-          - entity: sensor.530d_xdrive_vehicle_coolant_temperature
-            name: Coolant Temp
-          - entity: binary_sensor.530d_xdrive_check_control_messages
-            name: Check Control
-          - entity: binary_sensor.530d_xdrive_condition_based_services
-            name: CBS Status
-      - type: entities
-        title: Service Schedule
-        entities:
-          - entity: sensor.530d_xdrive_service_distance_to_next_service
-            name: Distance to Service
-          - entity: sensor.530d_xdrive_service_inspection_time_threshold
-            name: Inspection Time
-          - entity: sensor.530d_xdrive_service_next_service_distance_threshold
-            name: Next Service Distance
-          - entity: sensor.530d_xdrive_service_cbs_report_count
-            name: CBS Report Count
-      - type: entities
-        title: Doors & Openings
-        entities:
-          - entity: sensor.530d_xdrive_doors_overall_state
-          - entity: binary_sensor.530d_xdrive_door_state_front_driver
-          - entity: binary_sensor.530d_xdrive_door_state_front_passenger
-          - entity: binary_sensor.530d_xdrive_door_state_rear_driver
-          - entity: binary_sensor.530d_xdrive_door_state_rear_passenger
-          - entity: binary_sensor.530d_xdrive_hood_state
-          - entity: binary_sensor.530d_xdrive_tailgate_state
-          - entity: binary_sensor.530d_xdrive_tailgate_door_state
-      - type: entities
-        title: Windows
-        entities:
-          - entity: sensor.530d_xdrive_window_state_front_driver
-          - entity: sensor.530d_xdrive_window_state_front_passenger
-          - entity: sensor.530d_xdrive_window_state_rear_driver
-          - entity: sensor.530d_xdrive_window_state_rear_passenger
-          - entity: sensor.530d_xdrive_sunroof_overall_state
-          - entity: sensor.530d_xdrive_sunroof_state
-      - type: horizontal-stack
+    type: sections
+    max_columns: 3
+    sections:
+      # Column 1: Image → Doors & Windows
+      - type: grid
         cards:
+          - type: picture-entity
+            entity: image.530d_xdrive_vehicle_image
+            show_name: false
+            show_state: false
+            layout_options:
+              grid_columns: 4
           - type: entities
-            title: Tyre Pressure (Actual)
+            title: Doors & Windows
             entities:
-              - entity: sensor.530d_xdrive_tire_pressure_front_left
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_front_driver
+                icon: mdi:car-door
                 name: Front Left
-              - entity: sensor.530d_xdrive_tire_pressure_front_right
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_front_driver', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_front_driver') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_front_driver', 'off') and states('sensor.530d_xdrive_window_state_front_driver') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_front_passenger
+                icon: mdi:car-door
                 name: Front Right
-              - entity: sensor.530d_xdrive_tire_pressure_rear_left
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_front_passenger', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_front_passenger') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_front_passenger', 'off') and states('sensor.530d_xdrive_window_state_front_passenger') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_rear_driver
+                icon: mdi:car-door
                 name: Rear Left
-              - entity: sensor.530d_xdrive_tire_pressure_rear_right
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_rear_driver', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_rear_driver') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_rear_driver', 'off') and states('sensor.530d_xdrive_window_state_rear_driver') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_rear_passenger
+                icon: mdi:car-door
                 name: Rear Right
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_rear_passenger', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_rear_passenger') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_rear_passenger', 'off') and states('sensor.530d_xdrive_window_state_rear_passenger') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: section
+              - entity: sensor.530d_xdrive_doors_overall_state
+                name: Lock Status
+                icon: mdi:lock
+              - entity: binary_sensor.530d_xdrive_hood_state
+                name: Hood
+                icon: mdi:car-lifted-pickup
+              - entity: binary_sensor.530d_xdrive_tailgate_state
+                name: Tailgate
+                icon: mdi:car-back
+              - entity: sensor.530d_xdrive_sunroof_overall_state
+                name: Sunroof
+                icon: mdi:weather-sunny
+            layout_options:
+              grid_columns: 4
+      # Column 2: Location → Range & Mileage → Tyre Pressures
+      - type: grid
+        cards:
+          - type: map
+            entities:
+              - entity: device_tracker.530d_xdrive_location
+            aspect_ratio: 1:1
+            layout_options:
+              grid_columns: 4
+              grid_rows: 6
           - type: entities
-            title: Tyre Pressure (Target)
+            title: Range & Mileage
             entities:
-              - entity: sensor.530d_xdrive_tire_pressure_target_front_left
+              - entity: sensor.530d_xdrive_vehicle_mileage
+              - entity: sensor.530d_xdrive_range_tank_level
+              - entity: sensor.530d_xdrive_range_tank_level_2
+              - entity: sensor.530d_xdrive_range_total_range_last_sent
+            layout_options:
+              grid_columns: 4
+          - type: entities
+            title: Tyre Pressures
+            entities:
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_front_left
+                icon: mdi:car-tire-alert
                 name: Front Left
-              - entity: sensor.530d_xdrive_tire_pressure_target_front_right
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_front_left') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_front_left') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_front_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_left') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_front_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_left') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_front_right
+                icon: mdi:car-tire-alert
                 name: Front Right
-              - entity: sensor.530d_xdrive_tire_pressure_target_rear_left
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_front_right') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_front_right') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_front_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_right') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_front_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_right') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_rear_left
+                icon: mdi:car-tire-alert
                 name: Rear Left
-              - entity: sensor.530d_xdrive_tire_pressure_target_rear_right
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_rear_left') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_rear_left') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_rear_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_left') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_rear_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_left') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_rear_right
+                icon: mdi:car-tire-alert
                 name: Rear Right
-      - type: map
-        entities:
-          - entity: device_tracker.530d_xdrive_location
-        title: Location
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_rear_right') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_rear_right') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_rear_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_right') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_rear_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_right') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+            layout_options:
+              grid_columns: 4
+      # Column 3: Mileage Chart → Vehicle Health → Service Schedule
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: Insurance Year Mileage (Aug 16 → Aug 16)
+              show_states: true
+            update_interval: 6h
+            graph_span: 365d
+            span:
+              start: day
+              offset: "-237d"
+            series:
+              - entity: sensor.530d_xdrive_vehicle_mileage
+                name: Km driven (Year 2)
+                color: "#2196f3"
+                type: line
+                stroke_width: 2
+                data_generator: |
+                  // Weekly mileage from InfluxDB rp_10m (both old + new BMW integrations)
+                  const yearStartOdo = 52845; // Aug 16, 2025
+                  const history = [
+                    [1755302400000, 0],
+                    [1755734400000, 1746], [1756339200000, 1941],
+                    [1756944000000, 2070], [1757548800000, 2264],
+                    [1758153600000, 2410], [1758758400000, 2811],
+                    [1763596800000, 4730], [1764201600000, 5175],
+                    [1764806400000, 5345], [1765411200000, 5936],
+                    [1766016000000, 6170], [1766620800000, 7234],
+                    [1767225600000, 7946], [1767830400000, 8216],
+                    [1768435200000, 8461], [1769040000000, 9254],
+                    [1769644800000, 9932], [1770249600000, 9940],
+                    [1773273600000, 12039], [1773878400000, 12237],
+                    [1774483200000, 12419], [1775088000000, 12549],
+                    [1775692800000, 12600],
+                  ];
+                  const current = parseFloat(entity.state);
+                  if (!isNaN(current)) {
+                    history.push([Date.now(), current - yearStartOdo]);
+                  }
+                  return history;
+              - entity: sensor.530d_xdrive_vehicle_mileage
+                name: Projected to Aug 16
+                color: "#ff9800"
+                type: line
+                stroke_width: 2
+                stroke_dash: 5
+                data_generator: |
+                  const yearEnd = new Date(2026, 7, 16);
+                  const yearStartOdo = 52845;
+                  const current = parseFloat(entity.state);
+                  if (isNaN(current)) return [];
+                  const now = Date.now();
+                  const driven = current - yearStartOdo;
+                  // Rate from Jan 7 2026 (62785 km) to now
+                  const recentDriven = current - 62785;
+                  const recentDays = (now - new Date(2026, 0, 7).getTime()) / 86400000;
+                  const dailyRate = recentDriven / recentDays;
+                  const daysToEnd = (yearEnd.getTime() - now) / 86400000;
+                  const projected = driven + dailyRate * daysToEnd;
+                  return [
+                    [now, driven],
+                    [yearEnd.getTime(), projected],
+                  ];
+              - entity: sensor.530d_xdrive_vehicle_mileage
+                name: Year 1 actual pace
+                color: "#9e9e9e"
+                type: line
+                stroke_width: 1
+                stroke_dash: 3
+                data_generator: |
+                  // Year 1 REAL data from InfluxDB (shifted +1y to overlay)
+                  // Odometer minus Year 1 start (27,044 km)
+                  const y2start = 1755302400000; // Aug 16, 2025
+                  return [
+                    [y2start, 0],
+                    [1757808000000, 6349], [1760400000000, 7994],
+                    [1762992000000, 8825], [1765584000000, 11442],
+                    [1768176000000, 13778], [1770768000000, 16500],
+                    [1773360000000, 17630], [1775952000000, 19398],
+                    [1778544000000, 21561], [1781136000000, 23160],
+                    [1783728000000, 25842], [1786320000000, 27869],
+                    [1788912000000, 28612],
+                  ];
+            apex_config:
+              chart:
+                height: 350
+              stroke:
+                curve: smooth
+              yaxis:
+                - title:
+                    text: km driven
+                  min: 0
+                  labels:
+                    formatter: |
+                      EVAL:function(val) { return Math.round(val).toLocaleString(); }
+              xaxis:
+                type: datetime
+              annotations:
+                yaxis:
+                  - y: 25000
+                    borderColor: "#f44336"
+                    label:
+                      text: "25,000 km bracket"
+                      style:
+                        color: "#fff"
+                        background: "#f44336"
+                  - y: 20000
+                    borderColor: "#4caf50"
+                    borderWidth: 1
+                    label:
+                      text: "20,000 km bracket"
+                      style:
+                        color: "#fff"
+                        background: "#4caf50"
+          - type: entities
+            title: Vehicle Health
+            entities:
+              - entity: sensor.530d_xdrive_battery_voltage_12v
+                name: 12V Battery
+              - entity: sensor.530d_xdrive_vehicle_coolant_temperature
+                name: Coolant Temp
+            layout_options:
+              grid_columns: 4
+          - type: entities
+            title: Service Schedule
+            entities:
+              - entity: sensor.530d_xdrive_service_distance_to_next_service
+                name: Distance to Service
+              - entity: sensor.530d_xdrive_service_inspection_time_threshold
+                name: Inspection Time
+              - entity: sensor.530d_xdrive_service_next_service_distance_threshold
+                name: Next Service Distance
+              - entity: sensor.530d_xdrive_service_cbs_report_count
+                name: CBS Report Count
+            layout_options:
+              grid_columns: 4
   - path: default_view
     title: Home
     badges:
