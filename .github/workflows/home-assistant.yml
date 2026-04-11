@@ -23,13 +23,6 @@ jobs:
       - name: Check out configuration from GitHub
         uses: actions/checkout@v4
 
-      - name: Stub custom integrations for CI
-        run: |
-          mkdir -p custom_components/samsung_soundbar
-          echo '{"domain":"samsung_soundbar","name":"Samsung Soundbar (stub)","version":"0.0.0","integration_type":"device"}' \
-            > custom_components/samsung_soundbar/manifest.json
-          touch custom_components/samsung_soundbar/__init__.py
-
       - name: Upload prepared config
         uses: actions/upload-artifact@v4
         with:
