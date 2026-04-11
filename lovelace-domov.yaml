@@ -358,20 +358,28 @@ views:
             type: line
             stroke_width: 2
             data_generator: |
-              // Insurance Year 2: Aug 16, 2025 → Aug 16, 2026
-              const yearStart = new Date(2025, 7, 16);
-              const yearStartOdo = 52845;
-              // Known data points (from insurance reports + HA)
-              const points = [
-                [yearStart.getTime(), 0],
-                [new Date(2025, 8, 3).getTime(), 54135 - yearStartOdo],
+              // Weekly mileage from InfluxDB rp_10m (both old + new BMW integrations)
+              const yearStartOdo = 52845; // Aug 16, 2025
+              const history = [
+                [1755302400000, 0],
+                [1755734400000, 1746], [1756339200000, 1941],
+                [1756944000000, 2070], [1757548800000, 2264],
+                [1758153600000, 2410], [1758758400000, 2811],
+                [1763596800000, 4730], [1764201600000, 5175],
+                [1764806400000, 5345], [1765411200000, 5936],
+                [1766016000000, 6170], [1766620800000, 7234],
+                [1767225600000, 7946], [1767830400000, 8216],
+                [1768435200000, 8461], [1769040000000, 9254],
+                [1769644800000, 9932], [1770249600000, 9940],
+                [1773273600000, 12039], [1773878400000, 12237],
+                [1774483200000, 12419], [1775088000000, 12549],
+                [1775692800000, 12600],
               ];
-              // Current from live sensor
               const current = parseFloat(entity.state);
               if (!isNaN(current)) {
-                points.push([Date.now(), current - yearStartOdo]);
+                history.push([Date.now(), current - yearStartOdo]);
               }
-              return points;
+              return history;
           - entity: sensor.530d_xdrive_vehicle_mileage
             name: Projected to Aug 16
             color: "#ff9800"
@@ -379,15 +387,16 @@ views:
             stroke_width: 2
             stroke_dash: 5
             data_generator: |
-              const yearStart = new Date(2025, 7, 16);
               const yearEnd = new Date(2026, 7, 16);
               const yearStartOdo = 52845;
               const current = parseFloat(entity.state);
               if (isNaN(current)) return [];
               const now = Date.now();
               const driven = current - yearStartOdo;
-              const daysSinceStart = (now - yearStart.getTime()) / 86400000;
-              const dailyRate = driven / daysSinceStart;
+              // Rate from Jan 7 2026 (62785 km) to now
+              const recentDriven = current - 62785;
+              const recentDays = (now - new Date(2026, 0, 7).getTime()) / 86400000;
+              const dailyRate = recentDriven / recentDays;
               const daysToEnd = (yearEnd.getTime() - now) / 86400000;
               const projected = driven + dailyRate * daysToEnd;
               return [
@@ -395,21 +404,25 @@ views:
                 [yearEnd.getTime(), projected],
               ];
           - entity: sensor.530d_xdrive_vehicle_mileage
-            name: Year 1 pace (ref)
+            name: Year 1 actual pace
             color: "#9e9e9e"
             type: line
             stroke_width: 1
             stroke_dash: 3
             data_generator: |
-              // Year 1: Aug 16 2024→Aug 16 2025, drove ~27,091 km
-              const yearStart = new Date(2025, 7, 16);
-              const year1daily = 27091 / 365;
-              const points = [];
-              for (let d = 0; d <= 365; d += 30) {
-                points.push([yearStart.getTime() + d * 86400000, year1daily * d]);
-              }
-              points.push([yearStart.getTime() + 365 * 86400000, 27091]);
-              return points;
+              // Year 1 REAL data from InfluxDB (shifted +1y to overlay)
+              // Odometer minus Year 1 start (27,044 km)
+              const y2start = 1755302400000; // Aug 16, 2025
+              return [
+                [y2start, 0],
+                [1757808000000, 6349], [1760400000000, 7994],
+                [1762992000000, 8825], [1765584000000, 11442],
+                [1768176000000, 13778], [1770768000000, 16500],
+                [1773360000000, 17630], [1775952000000, 19398],
+                [1778544000000, 21561], [1781136000000, 23160],
+                [1783728000000, 25842], [1786320000000, 27869],
+                [1788912000000, 28612],
+              ];
         apex_config:
           chart:
             height: 350
@@ -419,6 +432,9 @@ views:
             - title:
                 text: km driven
               min: 0
+              labels:
+                formatter: |
+                  EVAL:function(val) { return Math.round(val).toLocaleString(); }
           xaxis:
             type: datetime
           annotations:
@@ -489,23 +505,30 @@ views:
           - entity: sensor.530d_xdrive_window_state_rear_passenger
           - entity: sensor.530d_xdrive_sunroof_overall_state
           - entity: sensor.530d_xdrive_sunroof_state
-      - type: custom:flex-table-card
-        title: Tyre Pressures
-        entities:
-          include: sensor.530d_xdrive_tire_pressure_*
-          exclude: sensor.530d_xdrive_tire_pressure_target_*
-        columns:
-          - name: Corner
-            data: friendly_name
-            modify: x.replace(/.*tire pressure /i, '').replace(/_/g, ' ')
-          - name: Actual
-            data: state
-            suffix: " bar"
-          - name: Target
-            data: entity_id
-            modify: |-
-              const id = x.replace('tire_pressure', 'tire_pressure_target');
-              hass.states[id] ? hass.states[id].state + ' bar' : '?'
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            title: Tyre Pressure (Actual)
+            entities:
+              - entity: sensor.530d_xdrive_tire_pressure_front_left
+                name: Front Left
+              - entity: sensor.530d_xdrive_tire_pressure_front_right
+                name: Front Right
+              - entity: sensor.530d_xdrive_tire_pressure_rear_left
+                name: Rear Left
+              - entity: sensor.530d_xdrive_tire_pressure_rear_right
+                name: Rear Right
+          - type: entities
+            title: Tyre Pressure (Target)
+            entities:
+              - entity: sensor.530d_xdrive_tire_pressure_target_front_left
+                name: Front Left
+              - entity: sensor.530d_xdrive_tire_pressure_target_front_right
+                name: Front Right
+              - entity: sensor.530d_xdrive_tire_pressure_target_rear_left
+                name: Rear Left
+              - entity: sensor.530d_xdrive_tire_pressure_target_rear_right
+                name: Rear Right
       - type: map
         entities:
           - entity: device_tracker.530d_xdrive_location
@@ -585,3 +608,33 @@ views:
           - entity: button.prusamini_pause_job
           - entity: button.prusamini_cancel_job
         title: Prusa Mini
+      - type: entities
+        title: "\U0001F50B Battery Status"
+        show_header_toggle: false
+        entities:
+          - entity: sensor.kitchen_light_remote_battery
+            name: Kitchen Light Remote
+          - entity: sensor.living_room_dining_light_controller_battery
+            name: Dining Light Controller
+          - entity: sensor.living_room_main_light_controller_battery
+            name: Main Light Controller
+          - entity: sensor.living_room_shutter_controller_battery
+            name: Living Room Shutter
+          - entity: sensor.living_room_aqara_cube_controller_battery
+            name: Aqara Cube
+          - entity: sensor.bedroom_symfonisk_sound_remote_gen2_battery
+            name: Bedroom Symfonisk Remote
+          - entity: sensor.wardrobe_light_switch_battery
+            name: Wardrobe Light Switch
+          - entity: sensor.kids_room_olivers_bed_light_controller_battery
+            name: Kids Oliver Bed Controller
+          - entity: sensor.kids_room_shutter_controller_battery
+            name: Kids Room Shutter
+          - entity: sensor.kids_room_table_light_remote_battery
+            name: Kids Table Light Remote
+          - entity: sensor.kids_room_temperature_humidity_sensor_battery
+            name: Kids Temp/Humidity Sensor
+          - entity: sensor.office_shutter_controller_battery
+            name: Office Shutter
+          - entity: sensor.q8_max_battery
+            name: Roborock Q8 Max
