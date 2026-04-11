@@ -127,7 +127,7 @@ yamllint lovelace-domov.yaml
 scp lovelace-domov.yaml root@homeassistant.local:/homeassistant/lovelace-domov.yaml
 # 4. Screenshot to verify visually
 python .github/scripts/ha_screenshot.py yaml-domov/7
-# 5. View screenshot, iterate
+# 5. View screenshot in .tmp/, iterate
 ```
 
 ### Visual Feedback Loop (Playwright Screenshots)
@@ -143,7 +143,7 @@ HA_USERNAME=copilot
 HA_PASSWORD=<password>
 ```
 
-The script authenticates via the HA login UI form, caches the session in `.ha_storage_state.json` (gitignored), and reuses it on subsequent runs. Use `--relogin` to force a fresh login.
+The script authenticates via the HA login UI form, caches the session in `.tmp/ha_storage_state.json` (gitignored), and reuses it on subsequent runs. Use `--relogin` to force a fresh login.
 
 **Usage:**
 ```bash
@@ -153,7 +153,7 @@ python .github/scripts/ha_screenshot.py yaml-domov/7
 python .github/scripts/ha_screenshot.py yaml-domov/7 --width 1400 --height 1000
 ```
 
-Output: `.screenshot-yaml-domov-7.png` (gitignored)
+Output: `.tmp/screenshot-yaml-domov-7.png` (gitignored via `.tmp/`)
 
 **Note:** HA long-lived API tokens do NOT work for frontend auth — the frontend requires OAuth tokens from the login flow. The script must use username/password login.
 

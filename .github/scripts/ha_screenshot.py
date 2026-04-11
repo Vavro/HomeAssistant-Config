@@ -8,19 +8,18 @@ Examples:
     python .github/scripts/ha_screenshot.py yaml-domov/7
     python .github/scripts/ha_screenshot.py yaml-domov/7 --out car.png
 
-Credentials are read from .env in the repo root (HA_SCREENSHOT_USERNAME, HA_SCREENSHOT_PASSWORD).
-Auth state is cached to .ha_storage_state.json for reuse. No credentials are printed.
+Credentials are read from .env in the repo root (HA_URL, HA_USERNAME, HA_PASSWORD).
+Auth state is cached to .tmp/ha_storage_state.json for reuse. No credentials are printed.
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 ENV_FILE = REPO_ROOT / ".env"
-STATE_FILE = REPO_ROOT / ".ha_storage_state.json"
-HA_URL = "http://homeassistant.local:8123"
+TMP_DIR = REPO_ROOT / ".tmp"
+STATE_FILE = TMP_DIR / "ha_storage_state.json"
 
 
 def load_env():
@@ -38,18 +37,17 @@ def load_env():
     return env
 
 
-def login_and_save_state(username, password, playwright):
+def login_and_save_state(ha_url, username, password, playwright):
     """Log in via the HA UI and save storageState for reuse."""
     browser = playwright.chromium.launch(headless=True)
     context = browser.new_context(color_scheme="dark")
     page = context.new_page()
 
     print("Logging in to HA ...")
-    page.goto(HA_URL, wait_until="networkidle", timeout=30000)
+    page.goto(ha_url, wait_until="networkidle", timeout=30000)
     page.wait_for_timeout(3000)
 
     # HA uses Shadow DOM — Playwright locators pierce it by default
-    # Use role-based selectors for robustness
     page.get_by_role("textbox").first.fill(username)
     page.locator("input[type='password']").fill(password)
     page.get_by_role("button", name="Log in").click()
@@ -61,11 +59,12 @@ def login_and_save_state(username, password, playwright):
     # Verify we're not still on login
     if "/auth/" in page.url:
         print(f"ERROR: Login failed — still on {page.url}", file=sys.stderr)
-        page.screenshot(path=str(REPO_ROOT / ".screenshot-login-debug.png"))
+        page.screenshot(path=str(TMP_DIR / "screenshot-login-debug.png"))
         browser.close()
         sys.exit(1)
 
     # Save the auth state
+    TMP_DIR.mkdir(exist_ok=True)
     context.storage_state(path=str(STATE_FILE))
     print(f"Auth state saved to {STATE_FILE.name}")
 
@@ -86,17 +85,19 @@ def main():
     args = parser.parse_args()
 
     env = load_env()
-    username = env.get("HA_SCREENSHOT_USERNAME")
-    password = env.get("HA_SCREENSHOT_PASSWORD")
+    ha_url = env.get("HA_URL", "http://homeassistant.local:8123")
+    username = env.get("HA_USERNAME")
+    password = env.get("HA_PASSWORD")
     if not username or not password:
         print(
-            "ERROR: HA_SCREENSHOT_USERNAME and HA_SCREENSHOT_PASSWORD required in .env",
+            "ERROR: HA_USERNAME and HA_PASSWORD required in .env",
             file=sys.stderr,
         )
         sys.exit(1)
 
+    TMP_DIR.mkdir(exist_ok=True)
     out_path = args.out or str(
-        REPO_ROOT / f".screenshot-{args.view.replace('/', '-')}.png"
+        TMP_DIR / f"screenshot-{args.view.replace('/', '-')}.png"
     )
 
     from playwright.sync_api import sync_playwright
@@ -104,7 +105,7 @@ def main():
     with sync_playwright() as p:
         # Login if no saved state or --relogin
         if args.relogin or not STATE_FILE.exists():
-            login_and_save_state(username, password, p)
+            login_and_save_state(ha_url, username, password, p)
 
         # Open browser with saved auth state
         browser = p.chromium.launch(headless=True)
@@ -115,7 +116,7 @@ def main():
         )
         page = context.new_page()
 
-        url = f"{HA_URL}/{args.view}"
+        url = f"{ha_url}/{args.view}"
         print(f"Navigating to {url} ...")
         page.goto(url, wait_until="networkidle", timeout=30000)
 
@@ -123,7 +124,7 @@ def main():
         if "/auth/" in page.url or "auth_callback" in page.url:
             print("Session expired, re-logging in ...")
             browser.close()
-            login_and_save_state(username, password, p)
+            login_and_save_state(ha_url, username, password, p)
 
             browser = p.chromium.launch(headless=True)
             context = browser.new_context(
@@ -137,7 +138,7 @@ def main():
         # Wait for cards to render
         page.wait_for_timeout(6000)
 
-        page.screenshot(path=out_path, full_page=args.full_page if hasattr(args, 'full_page') else True)
+        page.screenshot(path=out_path, full_page=True)
         print(f"Screenshot saved to {out_path}")
 
         browser.close()
