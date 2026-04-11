@@ -1,0 +1,767 @@
+---
+title: Místnosti
+views:
+  - path: l
+    icon: mdi:sofa
+    badges:
+      - type: entity
+        entity: sensor.living_room_dining_light_controller_battery
+      - type: entity
+        entity: sensor.living_room_main_light_controller_battery
+      - type: entity
+        entity: sensor.living_room_shutter_controller_battery
+      - type: entity
+        entity: sensor.living_room_temperature_sensor_cf5ca3fe_power
+      - type: entity
+        entity: button.q8_max_full_cleaning
+    cards:
+      - type: entities
+        entities:
+          - entity: scene.watching_tv_night
+          - entity: scene.all_lights_turned_off_except_hall
+      - type: entities
+        entities:
+          - light.living_room_dining_light_big_light
+          - light.living_room_dining_lights
+          - light.living_room_dining_spotlight_center_light
+          - light.living_room_dining_spotlight_left_light
+          - light.living_room_dining_spotlight_right_light
+          - light.living_room_kaja_light_level_light_color_on_off
+          - light.living_room_stand_light_light
+        title: Lights
+      - type: entities
+        entities:
+          - entity: light.living_room_main_light
+          - entity: light.living_room_main_light_outer_light
+            name: Outer
+          - entity: light.living_room_main_light_inner_light
+            name: Inner
+          - entity: switch.living_room_smart_socket_on_off
+        title: Living room main light outer
+        show_header_toggle: false
+      - type: media-control
+        entity: media_player.tv_samsung_q80_series_65
+      - type: media-control
+        entity: media_player.living_room_kodi
+      - type: media-control
+        entity: media_player.living_room_speaker
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - switch.living_room_soundbar_bass_boost
+              - switch.living_room_soundbar_night_mode
+              - switch.living_room_soundbar_voice_amplifier
+          - type: media-control
+            entity: media_player.living_room_soundbar
+      - type: entities
+        entities:
+          - entity: sensor.living_room_dining_light_controller_battery
+          - entity: sensor.living_room_kaja_light_controller_power
+          - entity: sensor.living_room_shutter_controller_battery
+          - entity: sensor.living_room_temperature_sensor_cf5ca3fe_power
+      - type: entities
+        entities:
+          - sensor.living_room_temperature_sensor_cf5ca3fe_humidity
+          - sensor.living_room_temperature_sensor_cf5ca3fe_temperature
+      - type: entities
+        entities:
+          - entity: cover.living_room_shutters
+          - entity: cover.obyvak_velke_stred
+          - entity: cover.obyvak_velke_vlevo
+          - entity: cover.obyvak_velke_vpravo
+          - entity: cover.obyvak_vpravo
+        title: Rolety obyvak
+      - type: history-graph
+        entities:
+          - entity: sensor.living_room_temperature_sensor_cf5ca3fe_temperature
+        hours_to_show: 48
+        title: Living room temperature
+        logarithmic_scale: false
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - vacuum.q8_max
+              - button.q8_max_full_cleaning
+              - select.q8_max_selected_map
+              - sensor.q8_max_battery
+              - binary_sensor.q8_max_charging
+              - sensor.q8_max_last_clean_begin
+              - sensor.q8_max_last_clean_end
+          - type: picture
+            image_entity: image.q8_max_map_0
+  - icon: mdi:countertop
+    badges:
+      - type: entity
+        entity: sensor.kitchen_light_remote_battery
+    cards:
+      - type: entities
+        entities:
+          - light.kitchen_counter_top_light
+          - light.kitchen_light_light
+        title: Lights
+      - type: entities
+        entities:
+          - switch.pecici_trouba_power
+          - switch.pecici_trouba_program_bottomheating
+          - switch.pecici_trouba_program_frozenheatupspecial
+          - switch.pecici_trouba_program_hotair
+          - switch.pecici_trouba_program_hotairgrilling
+          - switch.pecici_trouba_program_intensiveheat
+          - switch.pecici_trouba_program_keepwarm
+          - switch.pecici_trouba_program_pizzasetting
+          - switch.pecici_trouba_program_preheating
+          - switch.pecici_trouba_program_preheatovenware
+          - switch.pecici_trouba_program_slowcook
+          - switch.pecici_trouba_program_topbottomheating
+          - switch.pecici_trouba_program_topbottomheatingeco
+          - binary_sensor.pecici_trouba_door
+          - sensor.pecici_trouba_duration
+          - sensor.pecici_trouba_operation_state
+          - sensor.pecici_trouba_program_progress
+          - sensor.pecici_trouba_remaining_program_time
+          - binary_sensor.pecici_trouba_remote_control
+          - binary_sensor.pecici_trouba_remote_start
+      - type: entities
+        entities:
+          - cover.kuchyne
+  - icon: mdi:bed
+    badges:
+      - type: entity
+        entity: sensor.bedroom_symfonisk_sound_remote_gen2_battery
+      - type: entity
+        entity: sensor.wardrobe_light_switch_battery
+      - type: entity
+        entity: sensor.bedroom_lamp_remote_power
+    cards:
+      - type: entities
+        entities:
+          - scene.bedroom_bright
+          - scene.bedroom_dark
+      - type: entities
+        entities:
+          - light.bedroom_bed_lamp_light
+          - light.gledopto_gl_c_008p_light_2
+          - light.wardrobe_light_light
+        state_color: true
+        show_header_toggle: true
+        title: Lights
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: media-control
+            entity: media_player.bedroom_speaker
+          - type: entities
+            entities:
+              - number.bedroom_speaker_balance
+              - number.bedroom_speaker_bass
+              - switch.bedroom_speaker_crossfade
+              - switch.bedroom_speaker_loudness
+              - number.bedroom_speaker_treble
+              - switch.sonos_alarm_1
+              - switch.sonos_alarm_2
+      - type: entities
+        entities:
+          - cover.loznice
+          - cover.loznice_satna
+  - icon: mdi:stairs
+    badges:
+      - type: entity
+        entity: switch.eldes_alarm_pre_release
+      - type: entity
+        entity: person.petr_vavro
+      - type: entity
+        entity: person.hanka
+      - type: entity
+        entity: sensor.entry_hall_motion_sensoe_49a46e24_power
+      - type: entity
+        entity: sensor.entry_hall_switch_1_power
+    cards:
+      - type: entities
+        entities:
+          - entity: light.silicon_labs_ezsp_staircase_group_zha_group_0x0006
+          - entity: light.staircase_light_level_light_color_on_off
+          - entity: light.upstairs_light_light
+          - entity: light.tasmota_toilet_light
+          - entity: light.entry_hall_lights
+          - entity: light.entry_hall_light_1_light
+          - entity: light.entry_hall_light_2_light_3
+          - entity: light.entry_hall_light_level_light_color_on_off
+        title: Lights
+      - type: entities
+        entities:
+          - switch.bathroom_hot_water_circulation_2
+      - type: entities
+        entities:
+          - cover.schodiste
+      - type: entities
+        entities:
+          - light.toilet_heater_switch_light
+  - path: kids-room
+    icon: mdi:teddy-bear
+    cards:
+      - type: entities
+        entities:
+          - light.kids_room_olivers_bed_light_light
+          - light.kids_room_table_light_light
+      - type: entities
+        entities:
+          - cover.detsky_pokoj
+      - type: entities
+        entities:
+          - sensor.kids_room_temperature_humidity_sensor_humidity
+          - sensor.kids_room_temperature_humidity_sensor_temperature
+      - graph: line
+        type: sensor
+        entity: sensor.kids_room_temperature_humidity_sensor_temperature
+        detail: 1
+      - type: history-graph
+        entities:
+          - entity: sensor.kids_room_temperature_humidity_sensor_temperature
+          - entity: sensor.kids_room_temperature_humidity_sensor_humidity
+        logarithmic_scale: false
+    badges:
+      - type: entity
+        entity: sensor.kids_room_olivers_bed_light_controller_battery
+      - type: entity
+        entity: sensor.kids_room_shutter_controller_battery
+      - type: entity
+        entity: sensor.kids_room_table_light_remote_battery
+  - title: Kancelář
+    path: kancelar
+    icon: mdi:office-building
+    visible:
+      - user: 31d3f8d7f5c542d6aa3792fa2f63d91c
+      - user: 77f52680eb7e41d49d220ba56320b239
+    badges:
+      - type: entity
+        entity: sensor.ikea_of_sweden_remote_control_n2_d8c1e0fe_power
+      - type: entity
+        entity: sensor.office_shutter_controller_battery
+    cards:
+      - type: entities
+        entities:
+          - scene.office_video_konference_bright_sunlight
+          - scene.office_work_hours
+      - type: entities
+        entities:
+          - entity: light.office_lights
+          - entity: light.signify_netherlands_b_v_lca001_huelight_2
+          - entity: light.signify_netherlands_b_v_lca001_huelight
+        title: Lights
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - entity: button.prusamini_cancel_job
+              - entity: button.prusamini_pause_job
+              - entity: button.prusamini_resume_job
+              - entity: sensor.prusamini_filename
+              - entity: sensor.prusamini_material
+              - entity: sensor.prusamini_print_finish
+              - entity: sensor.prusamini_print_speed
+              - entity: sensor.prusamini_print_start
+              - entity: sensor.prusamini_progress
+              - entity: sensor.prusamini
+            footer:
+              type: buttons
+              entities:
+                - entity: scene.office_video_konference_bright_sunlight
+                  show_icon: true
+                  show_name: true
+                - entity: scene.office_work_hours
+                  show_icon: true
+                  show_name: true
+            title: Prusa mini
+            show_header_toggle: false
+            state_color: true
+          - type: picture-entity
+            entity: camera.prusamini_preview
+      - type: entities
+        entities:
+          - entity: switch.office_printer_socket_switch
+          - entity: device_tracker.samsung_c460_printer
+          - entity: sensor.samsung_c460_series
+      - type: entities
+        entities:
+          - cover.kancelar
+  - path: garden
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - switch.attic_switch
+          - switch.garage_switch
+      - type: entities
+        entities:
+          - switch.cerpadlo
+          - switch.garden_lights
+          - switch.not_connected_back_plugs
+          - switch.pergola_plugs
+          - sensor.zahrada_sonoff_4ch_pro_last_restart_time
+          - sensor.zahrada_sonoff_4ch_pro_mqtt_connect_count
+          - sensor.zahrada_sonoff_4ch_pro_restart_reason
+          - sensor.zahrada_sonoff_4ch_pro_ssid
+          - sensor.zahrada_sonoff_4ch_pro_wifi_connect_count
+      - type: entities
+        entities:
+          - entity: binary_sensor.hunter_hc6_connectivity
+          - entity: binary_sensor.kapka_vlevo_watering
+          - entity: binary_sensor.kapka_vpravo_watering
+          - entity: binary_sensor.zahrada_vpedu_watering
+          - entity: binary_sensor.zahrada_vzadu_watering
+          - entity: switch.kapka_vlevo_manual_watering
+          - entity: switch.kapka_vpravo_manual_watering
+          - entity: switch.zahrada_vpedu_manual_watering
+          - entity: switch.zahrada_vzadu_manual_watering
+          - entity: switch.kapka_vlevo_automatic_watering
+          - entity: switch.kapka_vpravo_automatic_watering
+          - entity: switch.zahrada_vpedu_automatic_watering
+          - entity: switch.zahrada_vzadu_automatic_watering
+          - entity: sensor.kapka_vlevo_watering_time
+          - entity: sensor.kapka_vpravo_next_cycle
+          - entity: sensor.kapka_vpravo_watering_time
+          - entity: sensor.zahrada_vpedu_next_cycle
+          - entity: sensor.zahrada_vpedu_watering_time
+          - entity: sensor.zahrada_vzadu_next_cycle
+          - entity: sensor.zahrada_vzadu_watering_time
+    icon: mdi:tree
+  - icon: mdi:car
+    path: ""
+    type: sections
+    max_columns: 3
+    sections:
+      # Column 1: Image → Doors & Windows
+      - type: grid
+        cards:
+          - type: picture-entity
+            entity: image.530d_xdrive_vehicle_image
+            show_name: false
+            show_state: false
+            layout_options:
+              grid_columns: 4
+          - type: entities
+            title: Doors & Windows
+            entities:
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_front_driver
+                icon: mdi:car-door
+                name: Front Left
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_front_driver', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_front_driver') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_front_driver', 'off') and states('sensor.530d_xdrive_window_state_front_driver') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_front_passenger
+                icon: mdi:car-door
+                name: Front Right
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_front_passenger', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_front_passenger') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_front_passenger', 'off') and states('sensor.530d_xdrive_window_state_front_passenger') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_rear_driver
+                icon: mdi:car-door
+                name: Rear Left
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_rear_driver', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_rear_driver') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_rear_driver', 'off') and states('sensor.530d_xdrive_window_state_rear_driver') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: binary_sensor.530d_xdrive_door_state_rear_passenger
+                icon: mdi:car-door
+                name: Rear Right
+                state: >
+                  {{ 'Closed' if is_state('binary_sensor.530d_xdrive_door_state_rear_passenger', 'off') else 'Open' }}
+                  · {{ states('sensor.530d_xdrive_window_state_rear_passenger') }}
+                card_mod:
+                  style: |
+                    :host {
+                      --card-mod-icon-color:
+                        {% if is_state('binary_sensor.530d_xdrive_door_state_rear_passenger', 'off') and states('sensor.530d_xdrive_window_state_rear_passenger') in ['CLOSED', 'Closed'] %}
+                          var(--state-icon-color)
+                        {% else %}
+                          #f44336
+                        {% endif %};
+                    }
+              - type: section
+              - entity: sensor.530d_xdrive_doors_overall_state
+                name: Lock Status
+                icon: mdi:lock
+              - entity: binary_sensor.530d_xdrive_hood_state
+                name: Hood
+                icon: mdi:car-lifted-pickup
+              - entity: binary_sensor.530d_xdrive_tailgate_state
+                name: Tailgate
+                icon: mdi:car-back
+              - entity: sensor.530d_xdrive_sunroof_overall_state
+                name: Sunroof
+                icon: mdi:weather-sunny
+            layout_options:
+              grid_columns: 4
+      # Column 2: Location → Range & Mileage → Tyre Pressures
+      - type: grid
+        cards:
+          - type: map
+            entities:
+              - entity: device_tracker.530d_xdrive_location
+            aspect_ratio: 1:1
+            layout_options:
+              grid_columns: 4
+              grid_rows: 6
+          - type: entities
+            title: Range & Mileage
+            entities:
+              - entity: sensor.530d_xdrive_vehicle_mileage
+              - entity: sensor.530d_xdrive_range_tank_level
+              - entity: sensor.530d_xdrive_range_tank_level_2
+              - entity: sensor.530d_xdrive_range_total_range_last_sent
+            layout_options:
+              grid_columns: 4
+          - type: entities
+            title: Tyre Pressures
+            entities:
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_front_left
+                icon: mdi:car-tire-alert
+                name: Front Left
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_front_left') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_front_left') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_front_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_left') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_front_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_left') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_front_right
+                icon: mdi:car-tire-alert
+                name: Front Right
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_front_right') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_front_right') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_front_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_right') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_front_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_front_right') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_rear_left
+                icon: mdi:car-tire-alert
+                name: Rear Left
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_rear_left') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_rear_left') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_rear_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_left') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_rear_left') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_left') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+              - type: custom:template-entity-row
+                entity: sensor.530d_xdrive_tire_pressure_rear_right
+                icon: mdi:car-tire-alert
+                name: Rear Right
+                state: >
+                  {{ states('sensor.530d_xdrive_tire_pressure_rear_right') }}
+                  / {{ states('sensor.530d_xdrive_tire_pressure_target_rear_right') }} kPa
+                secondary: >
+                  {% set d = states('sensor.530d_xdrive_tire_pressure_rear_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_right') | float(0) %}
+                  Δ {{ d | round(0) | int }} kPa
+                card_mod:
+                  style: |
+                    :host {
+                      {% set d = (states('sensor.530d_xdrive_tire_pressure_rear_right') | float(0) - states('sensor.530d_xdrive_tire_pressure_target_rear_right') | float(0)) | abs %}
+                      --card-mod-icon-color: {% if d <= 10 %} #4caf50 {% elif d <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+                    }
+            layout_options:
+              grid_columns: 4
+      # Column 3: Mileage Chart → Vehicle Health → Service Schedule
+      - type: grid
+        cards:
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: Insurance Year Mileage (Aug 16 → Aug 16)
+              show_states: true
+            update_interval: 6h
+            graph_span: 365d
+            span:
+              start: day
+              offset: "-237d"
+            series:
+              - entity: sensor.530d_xdrive_vehicle_mileage
+                name: Km driven (Year 2)
+                color: "#2196f3"
+                type: line
+                stroke_width: 2
+                data_generator: |
+                  // Weekly mileage from InfluxDB rp_10m (both old + new BMW integrations)
+                  const yearStartOdo = 52845; // Aug 16, 2025
+                  const history = [
+                    [1755302400000, 0],
+                    [1755734400000, 1746], [1756339200000, 1941],
+                    [1756944000000, 2070], [1757548800000, 2264],
+                    [1758153600000, 2410], [1758758400000, 2811],
+                    [1763596800000, 4730], [1764201600000, 5175],
+                    [1764806400000, 5345], [1765411200000, 5936],
+                    [1766016000000, 6170], [1766620800000, 7234],
+                    [1767225600000, 7946], [1767830400000, 8216],
+                    [1768435200000, 8461], [1769040000000, 9254],
+                    [1769644800000, 9932], [1770249600000, 9940],
+                    [1773273600000, 12039], [1773878400000, 12237],
+                    [1774483200000, 12419], [1775088000000, 12549],
+                    [1775692800000, 12600],
+                  ];
+                  const current = parseFloat(entity.state);
+                  if (!isNaN(current)) {
+                    history.push([Date.now(), current - yearStartOdo]);
+                  }
+                  return history;
+              - entity: sensor.530d_xdrive_vehicle_mileage
+                name: Projected to Aug 16
+                color: "#ff9800"
+                type: line
+                stroke_width: 2
+                stroke_dash: 5
+                data_generator: |
+                  const yearEnd = new Date(2026, 7, 16);
+                  const yearStartOdo = 52845;
+                  const current = parseFloat(entity.state);
+                  if (isNaN(current)) return [];
+                  const now = Date.now();
+                  const driven = current - yearStartOdo;
+                  // Rate from Jan 7 2026 (62785 km) to now
+                  const recentDriven = current - 62785;
+                  const recentDays = (now - new Date(2026, 0, 7).getTime()) / 86400000;
+                  const dailyRate = recentDriven / recentDays;
+                  const daysToEnd = (yearEnd.getTime() - now) / 86400000;
+                  const projected = driven + dailyRate * daysToEnd;
+                  return [
+                    [now, driven],
+                    [yearEnd.getTime(), projected],
+                  ];
+              - entity: sensor.530d_xdrive_vehicle_mileage
+                name: Year 1 actual pace
+                color: "#9e9e9e"
+                type: line
+                stroke_width: 1
+                stroke_dash: 3
+                data_generator: |
+                  // Year 1 REAL data from InfluxDB (shifted +1y to overlay)
+                  // Odometer minus Year 1 start (27,044 km)
+                  const y2start = 1755302400000; // Aug 16, 2025
+                  return [
+                    [y2start, 0],
+                    [1757808000000, 6349], [1760400000000, 7994],
+                    [1762992000000, 8825], [1765584000000, 11442],
+                    [1768176000000, 13778], [1770768000000, 16500],
+                    [1773360000000, 17630], [1775952000000, 19398],
+                    [1778544000000, 21561], [1781136000000, 23160],
+                    [1783728000000, 25842], [1786320000000, 27869],
+                    [1788912000000, 28612],
+                  ];
+            apex_config:
+              chart:
+                height: 350
+              stroke:
+                curve: smooth
+              yaxis:
+                - title:
+                    text: km driven
+                  min: 0
+                  labels:
+                    formatter: |
+                      EVAL:function(val) { return Math.round(val).toLocaleString(); }
+              xaxis:
+                type: datetime
+              annotations:
+                yaxis:
+                  - y: 25000
+                    borderColor: "#f44336"
+                    label:
+                      text: "25,000 km bracket"
+                      style:
+                        color: "#fff"
+                        background: "#f44336"
+                  - y: 20000
+                    borderColor: "#4caf50"
+                    borderWidth: 1
+                    label:
+                      text: "20,000 km bracket"
+                      style:
+                        color: "#fff"
+                        background: "#4caf50"
+          - type: entities
+            title: Vehicle Health
+            entities:
+              - entity: sensor.530d_xdrive_battery_voltage_12v
+                name: 12V Battery
+              - entity: sensor.530d_xdrive_vehicle_coolant_temperature
+                name: Coolant Temp
+            layout_options:
+              grid_columns: 4
+          - type: entities
+            title: Service Schedule
+            entities:
+              - entity: sensor.530d_xdrive_service_distance_to_next_service
+                name: Distance to Service
+              - entity: sensor.530d_xdrive_service_inspection_time_threshold
+                name: Inspection Time
+              - entity: sensor.530d_xdrive_service_next_service_distance_threshold
+                name: Next Service Distance
+              - entity: sensor.530d_xdrive_service_cbs_report_count
+                name: CBS Report Count
+            layout_options:
+              grid_columns: 4
+  - path: default_view
+    title: Home
+    badges:
+      - entity: sun.sun
+    cards:
+      - type: media-control
+        entity: media_player.living_room_speaker
+      - type: entities
+        entities:
+          - entity: switch.garden_lights
+          - entity: switch.pergola_plugs
+          - entity: switch.cerpadlo
+          - entity: switch.not_connected_back_plugs
+          - entity: switch.attic_switch
+          - entity: switch.garage_switch
+        title: Zahrada
+      - type: weather-forecast
+        entity: weather.domov
+        show_forecast: false
+      - type: entities
+        entities:
+          - cover.detsky_pokoj
+          - cover.kancelar
+          - cover.kuchyne
+          - cover.loznice
+          - cover.loznice_satna
+          - cover.obyvak_velke_stred
+          - cover.obyvak_velke_vlevo
+          - cover.obyvak_velke_vpravo
+          - cover.obyvak_vpravo
+          - cover.schodiste
+        title: cover
+      - type: entities
+        entities:
+          - entity: scene.office_video_konference_bright_sunlight
+          - entity: scene.office_work_hours
+          - entity: light.entry_hall_lights
+          - entity: light.signify_netherlands_b_v_lca001_huelight
+          - entity: cover.kancelar
+          - entity: switch.living_room_smart_socket_on_off
+      - type: entities
+        entities:
+          - entity: light.living_room_dining_light_big_light
+          - entity: light.living_room_dining_spotlight_center_light
+          - entity: light.living_room_dining_spotlight_left_light
+          - entity: light.living_room_dining_spotlight_right_light
+          - entity: light.kitchen_light_light
+          - entity: light.kitchen_counter_top_light
+          - entity: light.living_room_stand_light_light
+        title: Světlo
+      - type: entities
+        entities:
+          - switch.bathroom_hot_water_circulation_2
+          - light.tasmota_toilet_light
+        title: Vypínač
+      - type: picture-elements
+        elements:
+          - type: state-badge
+            entity: binary_sensor.clt_l29_is_charging
+            style:
+              top: 32%
+              left: 40%
+        image: /local/images/Ground-Floorplan.png
+      - type: entities
+        entities:
+          - entity: sensor.prusamini
+          - entity: sensor.prusamini_filename
+          - entity: camera.prusamini_preview
+          - entity: sensor.prusamini_print_finish
+          - entity: sensor.prusamini_print_start
+          - entity: sensor.prusamini_progress
+          - entity: button.prusamini_resume_job
+          - entity: button.prusamini_pause_job
+          - entity: button.prusamini_cancel_job
+        title: Prusa Mini
+      - type: entities
+        title: "\U0001F50B Battery Status"
+        show_header_toggle: false
+        entities:
+          - entity: sensor.kitchen_light_remote_battery
+            name: Kitchen Light Remote
+          - entity: sensor.living_room_dining_light_controller_battery
+            name: Dining Light Controller
+          - entity: sensor.living_room_main_light_controller_battery
+            name: Main Light Controller
+          - entity: sensor.living_room_shutter_controller_battery
+            name: Living Room Shutter
+          - entity: sensor.living_room_aqara_cube_controller_battery
+            name: Aqara Cube
+          - entity: sensor.bedroom_symfonisk_sound_remote_gen2_battery
+            name: Bedroom Symfonisk Remote
+          - entity: sensor.wardrobe_light_switch_battery
+            name: Wardrobe Light Switch
+          - entity: sensor.kids_room_olivers_bed_light_controller_battery
+            name: Kids Oliver Bed Controller
+          - entity: sensor.kids_room_shutter_controller_battery
+            name: Kids Room Shutter
+          - entity: sensor.kids_room_table_light_remote_battery
+            name: Kids Table Light Remote
+          - entity: sensor.kids_room_temperature_humidity_sensor_battery
+            name: Kids Temp/Humidity Sensor
+          - entity: sensor.office_shutter_controller_battery
+            name: Office Shutter
+          - entity: sensor.q8_max_battery
+            name: Roborock Q8 Max

@@ -24,6 +24,44 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+# Lovelace dashboards in YAML mode (version-controlled)
+# YAML dashboards are defined below; set your preferred one as default via HA UI
+# Reload: Developer Tools → YAML → Dashboards
+# Note: resource_mode: yaml required since HA 2026.2 (mode: yaml deprecated, removed in 2026.8)
+lovelace:
+  resource_mode: yaml
+  resources:
+    - url: /cardata/bmw-cardata-vehicle-card.js
+      type: module
+    - url: /hacsfiles/apexcharts-card/apexcharts-card.js
+      type: module
+    - url: /hacsfiles/flex-table-card/flex-table-card.js
+      type: module
+    - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
+      type: module
+    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+      type: module
+  dashboards:
+    yaml-domov:
+      mode: yaml
+      filename: lovelace-domov.yaml
+      title: Domov
+      icon: mdi:home
+      show_in_sidebar: true
+    yaml-overview:
+      mode: yaml
+      filename: ui-lovelace.yaml
+      title: Overview
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
+    yaml-location:
+      mode: yaml
+      filename: lovelace-location.yaml
+      title: Location
+      icon: mdi:map-marker
+      show_in_sidebar: true
+      require_admin: true
+
 zha:
   zigpy_config:
     ota:
@@ -35,12 +73,14 @@ zha:
       sonoff_provider: true
       thirdreality_provider: false
 
-samsung_soundbar:
-  devices:
-    - name: Living room soundbar
-      api_key: !secret living_room_soundbar_api_key
-      device_id: !secret living_room_soundbar_device_id
-      max_volume: 100
+# samsung_soundbar: disabled temporarily — broken on HA 2026.3 (SUPPORT_PAUSE removed)
+# TODO: fix media_player.py or wait for upstream update
+# samsung_soundbar:
+#   devices:
+#     - name: Living room soundbar
+#       api_key: !secret living_room_soundbar_api_key
+#       device_id: !secret living_room_soundbar_device_id
+#       max_volume: 100
 
 api:
 

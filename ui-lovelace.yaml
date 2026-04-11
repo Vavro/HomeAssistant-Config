@@ -1,0 +1,90 @@
+---
+title: Overview
+views:
+  - path: default_view
+    title: Home
+    badges:
+      - entity: sun.sun
+      - entity: person.petr_vavro
+      - entity: person.hanka
+      - entity: sensor.kitchen_light_remote_battery
+      - entity: sensor.living_room_dining_light_controller_battery
+      - entity: sensor.living_room_kaja_light_controller_power
+      - type: entity
+        show_name: false
+        show_state: true
+        show_icon: true
+        entity: sensor.living_room_main_light_controller_battery
+        color: ""
+      - entity: sensor.wardrobe_light_switch_battery
+      - entity: sensor.kids_room_olivers_bed_light_controller_battery
+      - entity: sensor.entry_hall_switch_1_power
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.samsung_c460_series_black_toner_s_n_crum_16120757025
+          - entity: sensor.samsung_c460_series_cyan_toner_s_n_crum_18102050066
+          - entity: sensor.samsung_c460_series_magenta_toner_s_n_crum_18102077840
+          - entity: sensor.samsung_c460_series_yellow_toner_s_n_crum_18102231283
+          - entity: sensor.samsung_c460_series
+        title: Kancelář
+        state_color: true
+      - type: media-control
+        entity: media_player.living_room_speaker
+      - type: media-control
+        entity: media_player.living_room_kodi
+      - type: entities
+        entities:
+          - entity: switch.garden_lights
+          - entity: switch.pergola_plugs
+          - entity: switch.cerpadlo
+          - entity: switch.not_connected_back_plugs
+          - entity: switch.attic_switch
+          - entity: switch.garage_switch
+        title: Zahrada
+      - type: entities
+        entities:
+          - cover.detsky_pokoj
+          - cover.kancelar
+          - cover.kuchyne
+          - cover.loznice
+          - cover.loznice_satna
+          - cover.obyvak_velke_stred
+          - cover.obyvak_velke_vlevo
+          - cover.obyvak_velke_vpravo
+          - cover.obyvak_vpravo
+          - cover.schodiste
+        title: cover
+      - type: entities
+        entities:
+          - entity: light.kitchen_light_light
+          - entity: light.kitchen_counter_top_light
+          - entity: light.living_room_dining_lights
+          - entity: light.living_room_dining_light_big_light
+          - entity: light.living_room_dining_spotlight_left_light
+          - entity: light.living_room_dining_spotlight_center_light
+          - entity: light.living_room_dining_spotlight_right_light
+          - entity: light.living_room_stand_light_light
+          - entity: light.living_room_kaja_light_level_light_color_on_off
+          - entity: light.living_room_main_light
+          - entity: light.living_room_main_light_inner_light
+          - entity: light.living_room_main_light_outer_light
+          - entity: light.tasmota_toilet_light
+          - entity: light.entry_hall_light_level_light_color_on_off
+          - entity: light.staircase_light_level_light_color_on_off
+          - entity: light.upstairs_light_light
+          - entity: light.gledopto_gl_c_008p_light_2
+          - entity: light.bedroom_bed_lamp_light
+          - entity: light.wardrobe_light_light
+          - entity: light.kids_room_olivers_bed_light_light
+          - entity: switch.attic_switch
+          - entity: light.office_lights
+          - entity: light.signify_netherlands_b_v_lca001_huelight_2
+          - entity: light.signify_netherlands_b_v_lca001_huelight
+        title: Světlo
+        state_color: true
+      - type: weather-forecast
+        entity: weather.domov
+        show_forecast: false
+      - type: media-control
+        entity: media_player.bedroom_speaker

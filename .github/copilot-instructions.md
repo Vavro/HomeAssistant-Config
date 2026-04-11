@@ -96,7 +96,131 @@ Follow HA's `domain.entity_id` convention. Entity IDs use `snake_case`. Friendly
 
 ## Lovelace
 
-Dashboard configuration lives in `ui-lovelace.yaml` (storage mode stores it in `.storage/` instead). Resources such as custom cards go in `www/`.
+Dashboard configurations are YAML-mode files loaded via `lovelace:` in `configuration.yaml`:
+
+| File | Dashboard |
+|------|-----------|
+| `ui-lovelace.yaml` | Default dashboard |
+| `lovelace-domov.yaml` | Domov (rooms + car) dashboard |
+| `lovelace-location.yaml` | Location dashboard |
+
+Resources (custom cards) are registered in `configuration.yaml` under `lovelace: resources:`. Custom card JS files live in `www/`.
+
+### HACS Custom Cards in Use
+
+| Card | Resource path | Purpose |
+|------|--------------|---------|
+| `apexcharts-card` | `/hacsfiles/apexcharts-card/apexcharts-card.js` | Advanced charts (mileage, etc.) |
+| `flex-table-card` | `/hacsfiles/flex-table-card/flex-table-card.js` | Flexible table layouts |
+| `template-entity-row` | `/hacsfiles/lovelace-template-entity-row/template-entity-row.js` | Jinja2-templated entity rows that render identically to native HA rows |
+| `card-mod` | `/hacsfiles/lovelace-card-mod/card-mod.js` | Conditional CSS styling on any card |
+
+### Dashboard Editing Workflow
+
+Lovelace YAML changes do **not** require an HA restart — a browser refresh is enough. The edit cycle is:
+
+```bash
+# 1. Edit YAML locally
+# 2. Lint
+yamllint lovelace-domov.yaml
+# 3. Deploy via SCP (instant — no restart needed)
+scp lovelace-domov.yaml root@homeassistant.local:/homeassistant/lovelace-domov.yaml
+# 4. Screenshot to verify visually
+python .github/scripts/ha_screenshot.py yaml-domov/7
+# 5. View screenshot in .tmp/, iterate
+```
+
+### Visual Feedback Loop (Playwright Screenshots)
+
+A Playwright-based screenshot tool at `.github/scripts/ha_screenshot.py` captures dashboard screenshots for visual iteration without relying on user screenshots.
+
+**Prerequisites:** `pip install playwright && playwright install chromium`
+
+**Auth setup:** Create a `.env` file (gitignored) with:
+```
+HA_URL=http://homeassistant.local:8123
+HA_USERNAME=copilot
+HA_PASSWORD=<password>
+```
+
+The script authenticates via the HA login UI form, caches the session in `.tmp/ha_storage_state.json` (gitignored), and reuses it on subsequent runs. Use `--relogin` to force a fresh login.
+
+**Usage:**
+```bash
+# Screenshot a specific view (dashboard/view_index)
+python .github/scripts/ha_screenshot.py yaml-domov/7
+# Custom viewport size
+python .github/scripts/ha_screenshot.py yaml-domov/7 --width 1400 --height 1000
+```
+
+Output: `.tmp/screenshot-yaml-domov-7.png` (gitignored via `.tmp/`)
+
+**Note:** HA long-lived API tokens do NOT work for frontend auth — the frontend requires OAuth tokens from the login flow. The script must use username/password login.
+
+**Security:** Never read `.env` or credential files into session output (e.g., `Get-Content .env`). When renaming variables, use in-place replacement without displaying contents. The variable names are already known from the script source code.
+
+### Sections View Layout
+
+The car dashboard (view 7 in `lovelace-domov.yaml`) uses the `sections` view type for explicit grid control:
+
+```yaml
+type: sections
+max_columns: 3
+sections:
+  - type: grid  # Column 1
+    cards:
+      - type: picture-entity
+        layout_options:
+          grid_columns: 4  # Full section width
+      - type: entities
+        layout_options:
+          grid_columns: 4
+  - type: grid  # Column 2
+    cards: ...
+```
+
+**Key constraints:**
+- Each section is a `type: grid` with `cards:`
+- Use `layout_options: grid_columns: 4` for full-width cards
+- Use `layout_options: grid_rows: N` to control card height (e.g., map cards)
+- **Custom cards (apexcharts-card) reject `layout_options`** — omit it for those cards; they auto-size to full width
+
+### Card Styling with template-entity-row + card-mod
+
+**Do NOT use markdown cards for data display** — HA sanitizes CSS (strips flexbox, grid, table-layout) and `<ha-icon>` inside markdown renders white instead of themed blue.
+
+Use `template-entity-row` for native-looking rows with templated state/icons:
+```yaml
+- type: custom:template-entity-row
+  entity: sensor.tire_pressure_front_left
+  icon: mdi:car-tire-alert
+  name: Front Left
+  state: "{{ states('sensor.actual') }} / {{ states('sensor.target') }} kPa"
+  secondary: "Δ {{ diff }} kPa"
+```
+
+Use `card-mod` for conditional icon colors:
+```yaml
+  card_mod:
+    style: |
+      :host {
+        --card-mod-icon-color: {% if val <= 10 %} #4caf50 {% elif val <= 20 %} #ff9800 {% else %} #f44336 {% endif %};
+      }
+```
+
+**card-mod notes:** Use `--card-mod-icon-color` (not deprecated `--paper-item-icon-color`). Use `var(--state-icon-color)` for default themed icon color.
+
+### Debugging Card Errors
+
+Custom card errors appear as red ⊘ cards. The error message is buried in HA's deep shadow DOM. Use Playwright to extract it:
+
+```javascript
+// In page.evaluate():
+function findInShadow(root, selector, depth) {
+  // Recursively search shadow roots for 'hui-error-card'
+  // Read e._config for the error message
+}
+```
 
 ## Development Workflow
 

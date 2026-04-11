@@ -67,6 +67,17 @@ hass-emulated-hue
 
 # Runtime files
 .ha_run.lock
+.ha_token
+
+# Service account tokens for Copilot / tooling (read-only)
+.influxdb_reader_token
+.grafana_token
+
+# Local environment (credentials for screenshot tool, etc.)
+.env
+
+# Temporary files (screenshots, auth state, debug artifacts)
+.tmp/
 
 # Cached integration brand icons and metadata (auto-downloaded by HA)
 .cache/
