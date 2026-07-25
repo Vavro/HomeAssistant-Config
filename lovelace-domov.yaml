@@ -208,6 +208,7 @@ views:
     cards:
       - type: entities
         entities:
+          - light.kids_room_main_light
           - light.kids_room_olivers_bed_light_light
           - light.kids_room_table_light_light
       - type: entities
